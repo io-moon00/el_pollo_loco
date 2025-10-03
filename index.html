@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Pollo loco</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="shortcut icon" href="img/3_enemies_chicken/chicken_normal/1_walk/1_w.png" type="image/x-icon">
+
+    <script src="js/models/drawable-object.class.js"></script>
+    <script src="js/models/movable-objects.class.js"></script>
+    <script src="js/models/character.class.js"></script>
+    <script src="js/models/enemy.class.js"></script>
+    <script src="js/models/cloud.class.js"></script>
+    <script src="js/models/status-bar.class.js"></script>
+    <script src="js/models/world.class.js"></script>
+    <script src="js/models/background-object.class.js"></script>
+    <script src="js/models/keyboard.class.js"></script>
+    <script src="js/models/level.class.js"></script>
+    <script src="js/models/bottles.js"></script>
+    <script src="js/models/coins.class.js"></script>
+    <script src="js/levels/level1.js"></script>
+    <script src="js/game.js"></script>
+
+
+
+</head>
+
+<body>
+    <div class="wrapper">
+        <h1 id="title" class="d-none">El Pollo loco</h1>
+
+        <div id="game" class="game d-none">
+            <canvas id="canvas" width="720" height="480"></canvas>
+            <div class="game-menu">
+                <div class="explanation">
+                    <img src="img/arrow-key.png" alt="Arrow to left">
+                    <span>Move forward</span>
+                </div>
+                <div class="explanation">
+                    <img src="img/arrow-key.png" alt="Arrow to left">
+                    <span>Move forward</span>
+                </div>
+                <div class="explanation">
+                    <img src="img/arrow-key.png" alt="Arrow to left">
+                    <span>Move forward</span>
+                </div>
+                <div class="explanation">
+                    <img src="img/arrow-key.png" alt="Arrow to left">
+                    <span>Move forward</span>
+                </div>
+                <div onclick="stopGame()">Stop Game</div>
+                <img class="fullScreen" src="img/fullScreen.png" alt="fullScreen">
+            </div>
+        </div>
+
+        <div class="container" id="container">
+            <img id="startScreen" src="img/9_intro_outro_screens/start/startscreen_1.png"
+                alt="El Pollo loco Start Screen">
+        </div>
+
+        <div id="menu" class="menu">
+            <img onclick="startGame()" src="img/start.png" alt="Start">
+            <img onclick="showHelpScreen()" src="img/help.png" alt="Start">
+            <img src="img/settings.png" alt="Start">
+        </div>
+    </div>
+</body>
+
+</html>

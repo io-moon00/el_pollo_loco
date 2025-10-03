@@ -1,0 +1,124 @@
+@font-face{
+    font-family: 'zabars';
+    src: url('fonts/zabars.ttf') format('truetype');
+}
+
+body{
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-image: url('img/body-bg.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: 'zabars', Arial, Helvetica, sans-serif;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    font-family: 'zabars', Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
+    height: 100vh;
+}
+
+canvas{
+    backdrop-filter: grayscale(40%);
+    display: block;
+    border: 6px solid rgb(66, 18, 18);
+    box-sizing: border-box;
+    position: relative;
+}
+
+h1{
+    font-size: 60px;
+    letter-spacing: 3px;
+    color: rgb(66, 18, 18);
+    text-shadow: 2px 2px 8px rgba(66, 18, 18, 0.5);
+}
+
+.fullScreen{
+    width: 50px;
+    height: 50px;
+}
+
+.explanation{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 30px;
+}
+
+.game-menu{
+    display: flex;
+    justify-content: space-between;
+}
+
+.game-menu img{
+    width: 50px;
+    height: 50px;
+}
+
+.container{
+    width: 60%;
+}
+
+.container img{
+    width: 100%;
+    object-fit: contain;
+    max-width: 1600px;
+}
+
+@media (max-width: 1020px){
+    .container{
+        width: 80%;
+    }
+}
+
+.menu{
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    width: 60vw;
+}
+
+.menu img{
+    width: 30%;
+    transition: all 175ms ease-in-out;
+}
+
+.menu img:hover{
+    transform: scale(1.05);
+    transition: all 175ms ease-in-out;
+    cursor: pointer;
+}
+
+.d-none{
+    display: none;
+}
+
+@media only screen and (max-width:720px){
+    canvas{
+        width: 100%;
+    }
+}
+
+@media only screen and (max-height:580px){
+    canvas{
+        height: 100vh;
+    }
+
+    h1{
+        display: none;
+    }
+
+    body{
+        padding: 0;
+    }
+}
