@@ -56,14 +56,18 @@ h1{
 }
 
 .game-menu{
+    margin-top: 20px;
     display: flex;
     justify-content: space-between;
 }
 
 .game-menu img{
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
 }
+
+
 
 .container{
     width: 60%;
@@ -88,12 +92,18 @@ h1{
     width: 60vw;
 }
 
-.menu img{
+
+.menu .item{
     width: 30%;
     transition: all 175ms ease-in-out;
 }
 
-.menu img:hover{
+.menu a img{
+    width: 100%;
+    height: auto;
+}
+
+.menu .item:hover{
     transform: scale(1.05);
     transition: all 175ms ease-in-out;
     cursor: pointer;
@@ -101,6 +111,52 @@ h1{
 
 .d-none{
     display: none;
+}
+
+.help-screen{
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 10px;
+    padding: 40px;
+}
+
+.help-screen .game-menu{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.help-screen .game-menu span{
+    white-space: nowrap;
+    margin-left: 20px;
+}
+
+.rotate-90{
+    transform: rotate(90deg);
+}
+
+.rotate-180{
+    transform: rotate(180deg);
+}
+
+.rotate-270{
+    transform: rotate(270deg);
+}
+
+
+
+.close{
+    background-color: rgb(66, 18, 18);
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 36px;
+    width: 100%;
+    display: flex;
+    box-sizing: border-box;
+    justify-content: center;
+    margin-top: 40px;
 }
 
 @media only screen and (max-width:720px){

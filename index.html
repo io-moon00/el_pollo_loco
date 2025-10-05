@@ -28,43 +28,27 @@
 
 </head>
 
-<body>
+<body onload="init();">
     <div class="wrapper">
         <h1 id="title" class="d-none">El Pollo loco</h1>
 
         <div id="game" class="game d-none">
             <canvas id="canvas" width="720" height="480"></canvas>
             <div class="game-menu">
-                <div class="explanation">
-                    <img src="img/arrow-key.png" alt="Arrow to left">
-                    <span>Move forward</span>
-                </div>
-                <div class="explanation">
-                    <img src="img/arrow-key.png" alt="Arrow to left">
-                    <span>Move forward</span>
-                </div>
-                <div class="explanation">
-                    <img src="img/arrow-key.png" alt="Arrow to left">
-                    <span>Move forward</span>
-                </div>
-                <div class="explanation">
-                    <img src="img/arrow-key.png" alt="Arrow to left">
-                    <span>Move forward</span>
-                </div>
                 <div onclick="stopGame()">Stop Game</div>
-                <img class="fullScreen" src="img/fullScreen.png" alt="fullScreen">
+                <img class="fullScreen" src="img/fullScreen.png" alt="fullScreen" />
             </div>
         </div>
 
         <div class="container" id="container">
             <img id="startScreen" src="img/9_intro_outro_screens/start/startscreen_1.png"
-                alt="El Pollo loco Start Screen">
+                alt="El Pollo loco Start Screen" />
         </div>
 
         <div id="menu" class="menu">
-            <img onclick="startGame()" src="img/start.png" alt="Start">
-            <img onclick="showHelpScreen()" src="img/help.png" alt="Start">
-            <img src="img/settings.png" alt="Start">
+            <img class="item" onclick="startGame()" src="img/start.png" alt="Start">
+            <a class="item" href="templates/help-screen.html"><img src="img/help.png" alt="Help"></a>
+            <a class="item" href="templates/settings-screen.html"><img src="img/settings.png" alt="Start"></a>
         </div>
     </div>
 </body>

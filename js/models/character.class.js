@@ -104,14 +104,14 @@ class Character extends MovableObject{
             if(this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x){
                 this.moveRight();
                 this.otherDirection = false;
-                this.walking_sound.play();
+                this.walking_sound.play().catch(e => console.log("Walking sound failed:", e));
                 this.setLastMove();
             }
 
             if(this.world.keyboard.LEFT && this.x > -600){
                 this.moveLeft();
                 this.otherDirection = true;
-                this.walking_sound.play();
+                this.walking_sound.play().catch(e => console.log("Walking sound failed:", e));
                 this.setLastMove();
             }
 
@@ -128,11 +128,11 @@ class Character extends MovableObject{
             if(this.isDead()){
                 this.playAnimation(this.IMAGES_DEAD);
                 setTimeout(stopGame(), 1000);
-            } else if(this.isHurt()){
-                this.playAnimation(this.IMAGES_HURT);
-                this.hurt_sound.play();
             } else if(this.isAboveGround()){
                 this.playAnimation(this.IMAGES_JUMPING);
+            } else if(this.isHurt()){
+                this.playAnimation(this.IMAGES_HURT);
+                this.hurt_sound.play().catch(e => console.log("Hurt sound failed:", e));
             } else if(this.world.keyboard.RIGHT || this.world.keyboard.LEFT){
                 this.playAnimation(this.IMAGES_WALKING);
             } else if(this.isLongIdle()){
@@ -154,7 +154,12 @@ class Character extends MovableObject{
     }
 
     isFlyingDown() {
-        console.log(this.speedY);
-        return this.isAboveGround();
+        console.log("check flying down");
+        console.log(this.speedY, this.isAboveGround());
+        if (this.speedY < 0 && this.isAboveGround()){
+            console.log("Flying down");
+            return true;
+        }
+        return false;
     }
 }

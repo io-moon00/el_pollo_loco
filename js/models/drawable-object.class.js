@@ -13,6 +13,8 @@ class DrawableObject {
         bottom: 0
     };
 
+    currentAnimationImage = null;
+
 
     loadImage(path){
         this.img = new Image();
@@ -29,6 +31,12 @@ class DrawableObject {
     }
 
     playAnimation(images){
+        // Reset currentImage if animation changed
+        if (this.currentAnimationImages !== images) {
+            this.currentImage = 0;
+            this.currentAnimationImages = images;
+        }
+        
         let i = this.currentImage % images.length;
         let path = images[i];
         this.img = this.imageCache[path];

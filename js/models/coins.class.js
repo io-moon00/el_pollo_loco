@@ -12,6 +12,6 @@ class Coin extends DrawableObject{
     collect_sound = new Audio('audio/collect_coin.mp3');
 
     collect(){
-        this.collect_sound.play();
+        this.collect_sound.play().catch(e => console.log("Collect coin sound failed:", e));
     }
 }

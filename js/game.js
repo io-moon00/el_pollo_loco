@@ -2,11 +2,21 @@ let canvas;
 let world;
 let keyboard = new Keyboard();
 let intervalIds = [];
+let background_sound = new Audio('audio/background.mp3');
 
+function init(){
+    background_sound.loop = true;
+    background_sound.volume = 0.5;
+    // Don't play audio here - wait for user interaction
+}
 
 
 function startGame(){
     showGameScreen();
+    // Play background music when user starts the game
+    background_sound.play().catch(e => {
+        console.log("Audio play failed:", e);
+    });
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
 };
@@ -36,36 +46,6 @@ function showGameScreen(){
     document.getElementById('menu').classList.add('d-none');
 }
 
-function showHelpScreen(){
-    let container = document.getElementById('container');
-    document.getElementById('startScreen').classList.add('d-none');
-    container.innerHTML = `
-    <div>
-        <div class="explanation">
-            <img src="img/arrow-key.png" alt="Arrow to left">
-            <span>Move forward</span>
-        </div>
-        <div class="explanation">
-            <img src="img/arrow-key.png" alt="Arrow to left">
-            <span>Move forward</span>
-        </div>
-        <div class="explanation">
-            <img src="img/arrow-key.png" alt="Arrow to left">
-            <span>Move forward</span>
-        </div>
-        <div class="explanation">
-            <img src="img/arrow-key.png" alt="Arrow to left">
-            <span>Move forward</span>
-        </div>
-        <div onclick="stopGame()">Stop Game</div>
-        <img class="fullScreen" src="img/fullScreen.png" alt="fullScreen">
-    </div>    
-    `
-}
-
-function showSettingsScreen(){
-
-}
 
 function showEndScreen(){
     

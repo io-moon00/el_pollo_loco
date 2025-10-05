@@ -22,16 +22,17 @@ class MovableObject extends DrawableObject{
                 this.speedY -= this.acceleration;
             }
             if(this instanceof Character){
-                console.log('y-speed: ' + this.speedY);
+                /*console.log('y-speed: ' + this.speedY); */
             }
         }, 1000 / 25)
     }
 
     isAboveGround(){
         if(this instanceof ThrowableBottle){
-            return true;
-        }else {
-            return this.y < 180;
+            return this.y < 400;
+        }else if (this instanceof Character){
+            console.log(this.y < 192);
+            return this.y < 192;
         }
     }
 

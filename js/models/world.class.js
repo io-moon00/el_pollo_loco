@@ -11,6 +11,7 @@ class World{
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
     throwableBottels=[];
+    dKeyPressed = false;
    
 
     constructor(canvas, keyboard){
@@ -27,7 +28,7 @@ class World{
         setStoppableInterval(() => {
             this.checkCollisions();
             this.checkThrowObjects();
-        }, 200)
+        }, 1000/60);
     }
 
     
@@ -39,15 +40,12 @@ class World{
     }
 
     checkEnemyCollision(){
-        this.level.enemies.forEach( (enemy, index) => {
+        console.log("check enemy collision");
+        this.level.enemies.forEach((enemy, index) => {
             if(this.character.isColliding(enemy) && !enemy.isDead()){
-                console.log(this.character.isFlyingDown());
-                if(this.character.y + this.character.height > enemy.y && this.character.isFlyingDown()){
+                if(this.character.isFlyingDown()){
                     enemy.life = 0;
-                    setTimeout(() => {
-                        this.level.enemies.splice(index, 1)
-                    }, 600);
-                }else{
+                } else if (!this.character.isHurt()){
                     this.character.hit();
                 }
             }
@@ -55,7 +53,7 @@ class World{
     }
 
     checkCoinCollision(){
-        this.level.coins.forEach( (coin, index) => {
+        this.level.coins.forEach((coin, index) => {
             if(this.character.isColliding(coin)){
                 coin.collect();
                 this.character.collectedCoins += 1;
@@ -65,12 +63,12 @@ class World{
     }
 
     checkBottleCollision(){
-        this.level.collectableBottles.forEach( (bottle, index) => {
+        this.level.collectableBottles.forEach((bottle, index) => {
             if(this.character.isColliding(bottle)){
+                bottle.collect();
                 this.character.collectedBottles += 1;
                 this.level.collectableBottles.splice(index, 1);
-
-            }
+            } 
         })
     }
 
@@ -78,16 +76,17 @@ class World{
         this.level.enemies.forEach((enemy, indexEnemy) => {
             this.throwableBottels.forEach((bottle, indexBottle) => {
                 if (enemy.isColliding(bottle)) {
+                    bottle.splash = true;
                     if(enemy instanceof Endboss){
                         this.EndbossBottleCollision(enemy, indexBottle);
-                    }else{    
+                    }else{
                         this.ChickenBottleCollision(enemy, indexEnemy, indexBottle);
                     }
-                    bottle.splash = true;     
                 }
             });
         });
     }
+
 
     ChickenBottleCollision(enemy, indexEnemy, indexBottle){
         enemy.life = 0;
@@ -103,15 +102,20 @@ class World{
     }
     
     checkThrowObjects(){
-        if(this.keyboard.D){
-            if (this.character.collectedBottles > 0){
-                let bottle = new ThrowableBottle(this.character.x+100, this.character.y+100);
-                this.throwableBottels.push(bottle);
-                this.character.collectedBottles -= 1;
-                this.character.setLastMove();
-            }
+    if(this.keyboard.D && !this.dKeyPressed){
+        // Key was just pressed down - throw bottle here
+        this.dKeyPressed = true;
+        if (this.character.collectedBottles > 0){
+            let bottle = new ThrowableBottle(this.character.x+100, this.character.y+100);
+            this.throwableBottels.push(bottle);
+            this.character.collectedBottles -= 1;
+            this.character.setLastMove();
         }
+    } else if(!this.keyboard.D && this.dKeyPressed){
+        // Key was just released - only reset the flag
+        this.dKeyPressed = false;
     }
+}
 
     draw(){
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
