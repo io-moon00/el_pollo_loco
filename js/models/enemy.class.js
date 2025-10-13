@@ -14,7 +14,7 @@ class Chicken extends MovableObject{
     constructor(){
         super().loadImage('../img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
         this.loadImages(this.IMAGES_WALKING);
-        this.x = 200 + Math.floor(Math.random() * 1100);
+        this.x = 200 + Math.floor(Math.random() * 1600);
         this.speed = 0.15 + Math.random() * 0.25;
         this.animate();
         this.offset = {
@@ -35,6 +35,9 @@ class Chicken extends MovableObject{
         setInterval(() => {
             if(this.isDead()){
                 this.loadImage('../img/3_enemies_chicken/chicken_normal/2_dead/dead.png')
+                setTimeout(() => {
+                    this.y = -1000;
+                }, 600);
             }else{
                 this.playAnimation(this.IMAGES_WALKING);
             }
@@ -44,8 +47,6 @@ class Chicken extends MovableObject{
 
 
 class Endboss extends MovableObject {
-
-
     IMAGES_WALKING = [
         '../img/4_enemie_boss_chicken/1_walk/G1.png',
         '../img/4_enemie_boss_chicken/1_walk/G2.png',
@@ -92,6 +93,10 @@ class Endboss extends MovableObject {
     width = 350;
     height = 350;
     life = 20;
+    speed = 0.7;
+    first_hit = false;
+    world;
+    first_contact = false;
 
     constructor(){
         super().loadImage(this.IMAGES_WALKING[3]);
@@ -100,7 +105,7 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_ATTACK);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
-        this.x = 1800;
+        this.x = 2000;
         this.offset = {
             top: 50,
             left: 50,
@@ -110,20 +115,36 @@ class Endboss extends MovableObject {
         this.animate();
     }
 
-    isAlert(){
-        return this.life ==15;
+    isAttacking(){
+        return this.first_contact && this.world.character.x + 200 > this.x;
     }
 
     animate(){
+        
+        let i = 0;
+
+        setInterval( () => {
+            if(!this.isDead() && !this.isHurt() && this.world.character.x > 1450 && i > 8){
+                this.moveLeft();
+            }
+        }, 1000/60);
+
         setInterval(() => {
             if(this.isDead()){
                 this.playAnimation(this.IMAGES_DEAD);
             } else if(this.isHurt()){
-                this.playAnimation(this.IMAGES_ALERT);
-            } else if(this.isAlert()){
                 this.playAnimation(this.IMAGES_HURT);
-            } else{
+            } else if(this.isAttacking()){
+                this.playAnimation(this.IMAGES_ATTACK);
+            } else if (i < 8){
+                this.playAnimation(this.IMAGES_ALERT);
+            } else {
                 this.playAnimation(this.IMAGES_WALKING);
+            }
+            i++;
+            if(this.world.character.x > 1450 && !this.first_contact && this.x < 1900){
+                i = 0;
+                this.first_contact = true;
             }
         }, 100);
     }

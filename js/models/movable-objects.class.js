@@ -21,9 +21,6 @@ class MovableObject extends DrawableObject{
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
             }
-            if(this instanceof Character){
-                /*console.log('y-speed: ' + this.speedY); */
-            }
         }, 1000 / 25)
     }
 
@@ -31,7 +28,6 @@ class MovableObject extends DrawableObject{
         if(this instanceof ThrowableBottle){
             return this.y < 400;
         }else if (this instanceof Character){
-            console.log(this.y < 192);
             return this.y < 192;
         }
     }

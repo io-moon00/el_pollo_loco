@@ -101,21 +101,27 @@ class Character extends MovableObject{
     animate(){   
         setInterval(() => {
             this.walking_sound.pause();
-            if(this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x){
+            if((this.world.keyboard.RIGHT || this.world.keyboard.D) && this.x < this.world.level.level_end_x){
                 this.moveRight();
                 this.otherDirection = false;
-                this.walking_sound.play().catch(e => console.log("Walking sound failed:", e));
+                if (isSoundActivated()) {
+                    this.walking_sound.volume = 1;
+                    this.walking_sound.play().catch(e => console.log("Walking sound failed:", e));
+                }
                 this.setLastMove();
             }
 
-            if(this.world.keyboard.LEFT && this.x > -600){
+            if((this.world.keyboard.LEFT || this.world.keyboard.A) && this.x > -600){
                 this.moveLeft();
                 this.otherDirection = true;
-                this.walking_sound.play().catch(e => console.log("Walking sound failed:", e));
+                if (isSoundActivated()) {
+                    this.walking_sound.volume = 1;
+                    this.walking_sound.play().catch(e => console.log("Walking sound failed:", e));
+                }
                 this.setLastMove();
             }
 
-            if((this.world.keyboard.SPACE || this.world.keyboard.UP) && !this.isAboveGround()){
+            if((this.world.keyboard.SPACE || this.world.keyboard.UP || this.world.keyboard.W) && !this.isAboveGround()){
                 this.jump();
                 this.setLastMove();
             }
@@ -127,13 +133,14 @@ class Character extends MovableObject{
             this.hurt_sound.pause();
             if(this.isDead()){
                 this.playAnimation(this.IMAGES_DEAD);
-                setTimeout(stopGame(), 1000);
             } else if(this.isAboveGround()){
                 this.playAnimation(this.IMAGES_JUMPING);
             } else if(this.isHurt()){
                 this.playAnimation(this.IMAGES_HURT);
-                this.hurt_sound.play().catch(e => console.log("Hurt sound failed:", e));
-            } else if(this.world.keyboard.RIGHT || this.world.keyboard.LEFT){
+                if (isSoundActivated()) {
+                    this.hurt_sound.play().catch(e => console.log("Hurt sound failed:", e));
+                }
+            } else if(this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.D || this.world.keyboard.A){
                 this.playAnimation(this.IMAGES_WALKING);
             } else if(this.isLongIdle()){
                 this.playAnimation(this.IMAGES_IDLE_LONG)
@@ -154,10 +161,7 @@ class Character extends MovableObject{
     }
 
     isFlyingDown() {
-        console.log("check flying down");
-        console.log(this.speedY, this.isAboveGround());
         if (this.speedY < 0 && this.isAboveGround()){
-            console.log("Flying down");
             return true;
         }
         return false;

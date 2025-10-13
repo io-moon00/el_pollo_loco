@@ -10,8 +10,8 @@ class World{
     statusBarHealth = new StatusBarHealth();
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
-    throwableBottels=[];
-    dKeyPressed = false;
+    throwableBottles=[];
+    qKeyPressed = false;
    
 
     constructor(canvas, keyboard){
@@ -40,13 +40,15 @@ class World{
     }
 
     checkEnemyCollision(){
-        console.log("check enemy collision");
-        this.level.enemies.forEach((enemy, index) => {
+        this.level.enemies.forEach((enemy) => {
             if(this.character.isColliding(enemy) && !enemy.isDead()){
                 if(this.character.isFlyingDown()){
+                    if (!(enemy instanceof Endboss)){
                     enemy.life = 0;
+                    }
                 } else if (!this.character.isHurt()){
                     this.character.hit();
+                    this.statusBarHealth.setPercentage(this.character.life);
                 }
             }
         })
@@ -73,14 +75,14 @@ class World{
     }
 
     checkCollisionsBottleEnemy() {
-        this.level.enemies.forEach((enemy, indexEnemy) => {
-            this.throwableBottels.forEach((bottle, indexBottle) => {
+        this.level.enemies.forEach((enemy) => {
+            this.throwableBottles.forEach((bottle) => {
                 if (enemy.isColliding(bottle)) {
                     bottle.splash = true;
-                    if(enemy instanceof Endboss){
-                        this.EndbossBottleCollision(enemy, indexBottle);
-                    }else{
-                        this.ChickenBottleCollision(enemy, indexEnemy, indexBottle);
+                    if(enemy instanceof Endboss && !enemy.isHurt()){
+                        this.EndbossBottleCollision(enemy);
+                    }else if (enemy instanceof Chicken){
+                        this.ChickenBottleCollision(enemy);
                     }
                 }
             });
@@ -88,32 +90,28 @@ class World{
     }
 
 
-    ChickenBottleCollision(enemy, indexEnemy, indexBottle){
+    ChickenBottleCollision(enemy){
         enemy.life = 0;
-        setTimeout(() => {
-            this.throwableBottels.splice(indexBottle, 1);
-            this.level.enemies.splice(indexEnemy, 1);
-        }, 600);
     }
 
-    EndbossBottleCollision(enemy, indexBottle){
+    EndbossBottleCollision(enemy){
         enemy.hit();
-        this.throwableBottels.splice(indexBottle, 1);
+        console.log('Endboss life: ' + enemy.life);
     }
     
     checkThrowObjects(){
-    if(this.keyboard.D && !this.dKeyPressed){
+    if(this.keyboard.Q && !this.qKeyPressed){
         // Key was just pressed down - throw bottle here
-        this.dKeyPressed = true;
+        this.qKeyPressed = true;
         if (this.character.collectedBottles > 0){
             let bottle = new ThrowableBottle(this.character.x+100, this.character.y+100);
-            this.throwableBottels.push(bottle);
+            this.throwableBottles.push(bottle);
             this.character.collectedBottles -= 1;
             this.character.setLastMove();
         }
-    } else if(!this.keyboard.D && this.dKeyPressed){
+    } else if(!this.keyboard.Q && this.qKeyPressed){
         // Key was just released - only reset the flag
-        this.dKeyPressed = false;
+        this.qKeyPressed = false;
     }
 }
 
@@ -135,7 +133,7 @@ class World{
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.collectableBottles);
         this.addObjectsToMap(this.level.coins);
-        this.addObjectsToMap(this.throwableBottels);
+        this.addObjectsToMap(this.throwableBottles);
         
         this.ctx.translate(-this.camera_x, 0);
         let self = this;
@@ -149,6 +147,10 @@ class World{
         this.character.world = this;
         this.statusBarCoin.world = this;
         this.statusBarBottle.world = this;
+        let endboss = this.level.enemies.find(e => e instanceof Endboss);
+        if (endboss){
+            endboss.world = this;
+        }
     };
 
     addObjectsToMap(objects){
@@ -182,4 +184,7 @@ class World{
         this.ctx.restore();
     }
 
+    isGameOver(){
+        return this.character.isDead() || this.level.enemies.find(e => e instanceof Endboss).isDead();
+    }
 }

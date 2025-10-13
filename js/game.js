@@ -6,17 +6,18 @@ let background_sound = new Audio('audio/background.mp3');
 
 function init(){
     background_sound.loop = true;
-    background_sound.volume = 0.5;
-    // Don't play audio here - wait for user interaction
+    background_sound.volume = 0.3;
 }
 
 
 function startGame(){
+    initLevel();
     showGameScreen();
-    // Play background music when user starts the game
+    if (isMusicActivated() === "true") {
     background_sound.play().catch(e => {
         console.log("Audio play failed:", e);
     });
+    }
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
 };
@@ -44,6 +45,35 @@ function showGameScreen(){
     document.getElementById('title').classList.remove('d-none');
     document.getElementById('startScreen').classList.add('d-none');
     document.getElementById('menu').classList.add('d-none');
+}
+
+function fullScreen() {
+    let element = document.getElementById("canvas");
+    enterFullscreen(element);
+}
+
+function enterFullscreen(element) {
+    if (element.requestFullscreen) {
+        element.requestFullscreen();
+    } else if (element.mozRequestFullScreen) { // Firefox
+        element.mozRequestFullScreen();
+    } else if (element.webkitRequestFullscreen) { // Chrome, Safari and Opera
+        element.webkitRequestFullscreen();
+    } else if (element.msRequestFullscreen) { // IE/Edge
+        element.msRequestFullscreen();
+    }
+}
+
+function exitFullscreen() {
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) { // Firefox
+        document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) { // Chrome, Safari and Opera
+        document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) { // IE/Edge
+        document.msExitFullscreen();
+    }
 }
 
 
@@ -77,6 +107,17 @@ window.addEventListener("keydown", (e) => {
         case 'KeyD':
             keyboard.D = true;
             break;
+        
+        case 'KeyQ':
+            keyboard.Q = true;
+            break;
+
+        case 'KeyA':
+            keyboard.A = true;
+            break;
+        
+        case 'KeyW':
+            keyboard.W = true;
     }
 });
 
@@ -105,6 +146,19 @@ window.addEventListener("keyup", (e) => {
 
         case 'KeyD':
             keyboard.D = false;
-            break;     
+            break;
+        
+        case 'KeyQ':
+            keyboard.Q = false;
+            break;
+
+        case 'KeyA':
+            keyboard.A = false;
+            break;
+        
+        case 'KeyW':
+            keyboard.W = false;
+            break;
+        
     }   
 });

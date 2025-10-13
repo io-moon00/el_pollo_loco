@@ -18,11 +18,11 @@
             <div class="game-menu">
                 <div class="explanation">
                     <span>Sound</span>
-                    <input type="checkbox" id="sound" name="sound" checked>
+                    <input onchange="saveSettings()" type="checkbox" id="sound" name="sound" checked>
                 </div>
                 <div class="explanation">
-                    <img src="../img/arrow-key.png" alt="Arrow to left">
-                    <span>Move backward</span>
+                    <span>Music</span>
+                    <input onchange="saveSettings()" type="checkbox" id="music" name="music" checked>
                 </div>
                 <div class="explanation">
                     <img class="rotate-90" src="../img/arrow-key.png" alt="Arrow to left">
@@ -34,7 +34,6 @@
                 </div>
             </div>
         </div>
-        <button onclick="saveSettings()" class="close">Save</button>
         <a class="close" href="../index.html">Close</a>
     </div>
 
