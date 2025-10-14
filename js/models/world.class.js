@@ -12,7 +12,8 @@ class World{
     statusBarBottle = new StatusBarBottle();
     throwableBottles=[];
     qKeyPressed = false;
-   
+    gameOverSound = new Audio('audio/game_over.mp3');
+
 
     constructor(canvas, keyboard){
         this.ctx = canvas.getContext('2d');
@@ -23,13 +24,14 @@ class World{
         this.draw();
     };
 
-
     run(){
         setStoppableInterval(() => {
             this.checkCollisions();
             this.checkThrowObjects();
         }, 1000/60);
     }
+
+
 
     
     checkCollisions(){
@@ -139,7 +141,11 @@ class World{
         let self = this;
 
         requestAnimationFrame(function() {
-            self.draw();
+            if (!self.isGameOver()) {
+                self.draw();
+            } else {
+                self.drawGameOver();
+            }
         });
     };
 
@@ -182,6 +188,25 @@ class World{
     flipImageBack(mo){
         mo.x = mo.x* -1;
         this.ctx.restore();
+    }
+
+    drawGameOver(){
+        if (isSoundActivated()){
+            this.gameOverSound.play();
+        }
+        let gameOverImg = new Image();
+        gameOverImg.src = 'img/9_intro_outro_screens/game_over/game over.png';
+        gameOverImg.onload = () => {
+            const scaledWidth = gameOverImg.width * 0.5;
+            const scaledHeight = gameOverImg.height * 0.5;
+            this.ctx.drawImage(
+                gameOverImg, 
+                this.canvas.width/2 - scaledWidth/2, 
+                this.canvas.height/2 - scaledHeight/2,
+                scaledWidth,
+                scaledHeight
+            );
+        };
     }
 
     isGameOver(){

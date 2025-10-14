@@ -55,6 +55,12 @@ h1{
     font-size: 30px;
 }
 
+.explanation div{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .game-menu{
     margin-top: 20px;
     display: flex;
