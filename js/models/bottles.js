@@ -1,10 +1,9 @@
 class ThrowableBottle extends MovableObject{
-
     splash_sound = new Audio('audio/splash_bottle.mp3');
     throw_sound = new Audio('audio/throw_bottle.mp3');
     splash = false;
     splashed = false;
-  
+    otherDirection = false;
 
     SPLASH_IMAGES = [
         '../img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png',
@@ -22,10 +21,13 @@ class ThrowableBottle extends MovableObject{
         '../img/6_salsa_bottle/bottle_rotation/4_bottle_rotation.png'
     ];
 
-    constructor(x, y){
+    constructor(x, y, otherDirection){
         super();
         this.x = x;
         this.y = y;
+        this.otherDirection = otherDirection;
+        this.animationState = 'rotating'; // 'rotating', 'splashing', 'finished'
+        this.splashAnimationIndex = 0;
         super.loadImage('img/6_salsa_bottle/salsa_bottle.png');
         this.loadImages(this.ROTATE_IMAGES);
         this.loadImages(this.SPLASH_IMAGES);
@@ -35,79 +37,128 @@ class ThrowableBottle extends MovableObject{
         this.animate();
     }
 
+    /**
+     * Initiates the throwing animation and physics for the bottle.
+     * Sets the initial vertical speed, applies gravity, plays a throwing sound,
+     * and starts an interval for horizontal movement.
+     * @returns {void}
+     */
     throw(){
         this.speedY = 10;
         this.applyGravity();
-        if (isSoundActivated()) {
-            this.throw_sound.play();
-        }
-        setInterval(() => {
-            if (this.isAboveGround()){
-                this.x +=5;
-            }
-            else{
-                this.speedY = 0;
-            }
+        this.playSound(this.throw_sound);
+        setStoppableInterval(() => {
+           this.handleHorizontalMovement();
         }, 10)
     }
 
-    removeFromWorld(){
+    /**
+     * Handles the horizontal movement of the bottle while it is in the air.
+     * Moves the bottle to the left or right depending on the 'otherDirection' property.
+     * Stops vertical movement by setting speedY to 0 once the bottle is no longer above ground.
+     * @returns {void}
+     */
+    handleHorizontalMovement(){
+        if (this.isAboveGround() && this.otherDirection){
+            this.x -= 5;
+        } else if (this.isAboveGround() && !this.otherDirection){
+            this.x += 5;
+        } else {
+            this.speedY = 0;
+        }
+    }
+
+    /**
+     * Initiates the splashing animation sequence for the bottle.
+     * Sets the animation state to 'splashing', resets the splash animation index,
+     * and plays the splash sound. The sound is stopped after 1 second.
+     * @returns {void}
+     */
+    startSplashing(){
+        this.animationState = 'splashing';
+        this.splashAnimationIndex = 0;
+        this.playSound(this.splash_sound);
         setTimeout(() => {
-            this.x = -1000;
-            this.y = -1000;
-        }, 100);
+            this.splash_sound.pause();
+        }, 300);
     }
 
-    is_splashing(){
-        if (this.img.src.includes("bottle_splash/6_bottle_splash.png")){
-            this.splashed = true;
-            return false;
-        }
-        if (this.isAboveGround()){
-            return this.splash;
-        }
-        return true;
-    }
-
+    /**
+     * Manages the animation lifecycle of the throwable bottle.
+     * Sets an interval to continuously check the bottle's animation state ('rotating', 'splashing', 'finished')
+     * and calls the corresponding animation method or removes the bottle from the game world.
+     * @returns {void}
+     */
     animate(){
-        this.splash_sound.pause();
-        setInterval(() =>{
-            if (!this.splashed  && this.is_splashing()) {
-                this.playAnimation(this.SPLASH_IMAGES);
-                if (isSoundActivated()) {
-                    this.splash_sound.play().catch(e => console.log("Splash sound failed:", e));
-                }
-            } else if (this.isAboveGround()) {
-                this.playAnimation(this.ROTATE_IMAGES);
-            } else {
-                this.removeFromWorld();
+        setStoppableInterval(() => {
+            switch(this.animationState) {
+                case 'rotating':
+                    this.rotatingAnimation();
+                    break;
+                case 'splashing':
+                    this.splashingAnimation();
+                    break;
+                case 'finished':
+                    this.removeFromWorld(200);
+                    break;
             }
         }, 100);
+    }
+
+    /**
+     * Manages the rotating animation of the bottle.
+     * If the bottle is above the ground, it plays the rotation animation.
+     * Otherwise, it initiates the splashing animation.
+     * @returns {void}
+     */
+    rotatingAnimation(){
+        if (this.isAboveGround()) {
+            this.playAnimation(this.ROTATE_IMAGES);
+        } else {
+            this.startSplashing();
+        }          
+    }
+
+    /**
+     * Manages the splashing animation of the bottle.
+     * It iterates through the SPLASH_IMAGES array to display the splash effect frame by frame.
+     * Once all splash images have been displayed, it sets the animation state to 'finished'.
+     * @returns {void}
+     */
+    splashingAnimation(){
+        if (this.splashAnimationIndex < this.SPLASH_IMAGES.length) {
+            this.img = this.imageCache[this.SPLASH_IMAGES[this.splashAnimationIndex]];
+            this.splashAnimationIndex++;
+        } else {
+            this.animationState = 'finished';
+        }
     }
 }
 
 class CollectableBottle extends DrawableObject{
     width = 60;
     height = 50;
+    collect_sound = new Audio('audio/collect_bottle.mp3');
+    is_collected = false;
 
-    constructor(){
-        super().loadImage('../img/6_salsa_bottle/salsa_bottle.png');
-        this.x = 200 + Math.floor(Math.random() * 1400);
-        this.y = 100 + Math.floor(Math.random() * 300);
-    }
-
-    collect(){
-        if (isSoundActivated()) {
-            let collect_sound = new Audio('audio/collect_bottle.mp3');
-            collect_sound.play();
-        }
-    }
-}
-
-class OnGroundBottle extends CollectableBottle{
-    constructor(img){
+    constructor(img, y = undefined){
         super().loadImage(img);
         this.x = 200 + Math.floor(Math.random() * 1400);
-        this.y = 380;
+        this.y = y !== undefined ? y : 100 + Math.floor(Math.random() * 300);
+    }
+
+
+    /**
+     * Handles the collection of the bottle.
+     * Plays a collection sound and removes the bottle from the game world after a short delay.
+     * @returns {void}
+     */
+    collect(){
+        this.is_collected = true;
+        this.playSound(this.collect_sound);
+        this.removeFromWorld(50);
+        setTimeout(() => {
+            this.collect_sound.pause();
+        }, 200);
     }
 }

@@ -5,53 +5,118 @@ let intervalIds = [];
 let background_sound = new Audio('audio/background.mp3');
 
 function init(){
-    background_sound.loop = true;
-    background_sound.volume = 0.3;
+
 }
 
 
+/**
+ * Initializes and starts the game.
+ * This function hides the game over menu, initializes the level,
+ * displays the game screen, starts the background music,
+ * resets interval tracking, and creates a new game world instance.
+ * @returns {void}
+ */
 function startGame(){
+    document.getElementById('gameOverMenu').classList.add('d-none');
     initLevel();
     showGameScreen();
-    if (isMusicActivated() === "true") {
-    background_sound.play().catch(e => {
-        console.log("Audio play failed:", e);
-    });
-    }
+    playMusic();
+    intervalIds = [];
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
 };
 
-function stopGame(){  
+/**
+ * Stops the game by pausing the background music and clearing all game-related intervals.
+ * @returns {void}
+ */
+function stopGame(){ 
+    background_sound.pause();
     intervalIds.forEach(clearInterval);
+}
+
+/**
+ * Resets the game to the start screen.
+ * This function stops all game-related processes and displays the initial start screen.
+ * @returns {void}
+ */
+function resetGame(){
+    stopGame();
     showStartscreen();
 }
-
     
+/**
+ * Sets a stoppable interval by wrapping setInterval and storing its ID.
+ * This allows all created intervals to be cleared later by iterating through the `intervalIds` array.
+ * @param {function} fn - The function to be executed repeatedly.
+ * @param {number} time - The interval time in milliseconds.
+ * @returns {void}
+ */
 function setStoppableInterval(fn, time) {
     let id = setInterval(fn, time);
-    intervalIds.push({ id, time, fn });
+    intervalIds.push(id);
 }
 
+/**
+ * Displays the start screen of the game.
+ * This function hides the game canvas and title, sets the start screen background,
+ * and shows the main menu and the start game button.
+ * @returns {void}
+ */
 function showStartscreen(){
     document.getElementById('game').classList.add('d-none');
     document.getElementById('title').classList.add('d-none');
-    document.getElementById('startScreen').classList.remove('d-none');
+    document.getElementById('body').style.backgroundImage = "url('img/start-screen.png')";
     document.getElementById('menu').classList.remove('d-none');
+    document.getElementById('start-game-btn').classList.remove('d-none');
 }
 
+/**
+ * Displays the main game screen.
+ * This function hides the main menu and start button, shows the game canvas and title,
+ * and sets the background image for the game.
+ * @returns {void}
+ */
 function showGameScreen(){
     document.getElementById('game').classList.remove('d-none');
     document.getElementById('title').classList.remove('d-none');
-    document.getElementById('startScreen').classList.add('d-none');
+    document.getElementById('body').style.backgroundImage = "url('img/game-background.png')";
     document.getElementById('menu').classList.add('d-none');
+    document.getElementById('start-game-btn').classList.add('d-none');
 }
 
+/**
+ * Toggles fullscreen mode for the game canvas.
+ * This function retrieves the canvas element and calls the `enterFullscreen`
+ * function to switch the display to fullscreen.
+ * @returns {void}
+ */
 function fullScreen() {
     let element = document.getElementById("canvas");
     enterFullscreen(element);
 }
 
+/**
+ * Configures and plays the background music for the game.
+ * This function sets the background music to loop, adjusts its volume,
+ * and plays it only if the music setting is enabled.
+ * @returns {void}
+ */
+function playMusic() {
+    background_sound.loop = true;
+    background_sound.volume = 0.3;
+    if (isMusicActivated()) {
+        background_sound.play();
+    }
+}
+
+/**
+ * Requests to display a given HTML element in fullscreen mode, handling browser-specific implementations.
+ * This function checks for the standard `requestFullscreen` method and falls back to vendor-prefixed
+ * versions for compatibility with different browsers like Firefox, Chrome, Safari, Opera, and IE/Edge.
+ * @param {HTMLElement} element - The HTML element to be displayed in fullscreen.
+ * @returns {void}
+ */
 function enterFullscreen(element) {
     if (element.requestFullscreen) {
         element.requestFullscreen();
@@ -64,6 +129,12 @@ function enterFullscreen(element) {
     }
 }
 
+/**
+ * Exits fullscreen mode for the document.
+ * This function checks for and calls the appropriate method to exit fullscreen
+ * based on the browser being used (standard, Firefox, Chrome/Safari/Opera, IE/Edge).
+ * @returns {void}
+ */
 function exitFullscreen() {
     if (document.exitFullscreen) {
         document.exitFullscreen();
@@ -77,12 +148,12 @@ function exitFullscreen() {
 }
 
 
+
 function showEndScreen(){
     
 }
 
 window.addEventListener("keydown", (e) => {
-
     switch (e.code) {
         case 'ArrowUp':
             keyboard.UP = true;

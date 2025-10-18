@@ -24,16 +24,27 @@ class World{
         this.draw();
     };
 
+    /**
+     * Starts the main game loop.
+     * This function sets up a stoppable interval that runs at approximately 60 frames per second.
+     * In each interval, it checks for collisions between game objects and checks if the player
+     * has initiated a throw action.
+     * @returns {void}
+     */
     run(){
         setStoppableInterval(() => {
             this.checkCollisions();
             this.checkThrowObjects();
         }, 1000/60);
     }
-
-
-
     
+    /**
+     * Checks for all types of collisions within the game world.
+     * This function serves as a central point to manage collision detection 
+     * between the character and various game objects like enemies, coins, and bottles,
+     * as well as collisions between thrown bottles and enemies.
+     * @returns {void}
+     */
     checkCollisions(){
         this.checkEnemyCollision();
         this.checkCoinCollision();
@@ -56,22 +67,36 @@ class World{
         })
     }
 
+    /**
+     * Checks for collisions between the character and coins.
+     * Iterates through all coins in the level. If the character is colliding with a coin,
+     * the coin is marked as collected and the character's collected coin count is incremented.
+     * @returns {void}
+     */
     checkCoinCollision(){
-        this.level.coins.forEach((coin, index) => {
+        this.level.coins.forEach((coin) => {
             if(this.character.isColliding(coin)){
-                coin.collect();
-                this.character.collectedCoins += 1;
-                this.level.coins.splice(index, 1);
+                if (!coin.is_collected){
+                    coin.collect();
+                    this.character.collectedCoins += 1;
+                }
             }
         })
     }
 
+    /**
+     * Checks for collisions between the character and collectable bottles.
+     * Iterates through all collectable bottles in the level. If the character collides with a bottle,
+     * the bottle is marked as collected, and the character's count of collected bottles is incremented.
+     * @returns {void}
+     */
     checkBottleCollision(){
         this.level.collectableBottles.forEach((bottle, index) => {
             if(this.character.isColliding(bottle)){
-                bottle.collect();
-                this.character.collectedBottles += 1;
-                this.level.collectableBottles.splice(index, 1);
+                if (!bottle.is_collected){
+                    bottle.collect();
+                    this.character.collectedBottles += 1;
+                }
             } 
         })
     }
@@ -80,7 +105,7 @@ class World{
         this.level.enemies.forEach((enemy) => {
             this.throwableBottles.forEach((bottle) => {
                 if (enemy.isColliding(bottle)) {
-                    bottle.splash = true;
+                    bottle.startSplashing();
                     if(enemy instanceof Endboss && !enemy.isHurt()){
                         this.EndbossBottleCollision(enemy);
                     }else if (enemy instanceof Chicken){
@@ -106,7 +131,7 @@ class World{
         // Key was just pressed down - throw bottle here
         this.qKeyPressed = true;
         if (this.character.collectedBottles > 0){
-            let bottle = new ThrowableBottle(this.character.x+100, this.character.y+100);
+            let bottle = new ThrowableBottle(this.character.x+100, this.character.y+100, this.character.otherDirection);
             this.throwableBottles.push(bottle);
             this.character.collectedBottles -= 1;
             this.character.setLastMove();
@@ -141,10 +166,14 @@ class World{
         let self = this;
 
         requestAnimationFrame(function() {
-            if (!self.isGameOver()) {
+            if (!self.isGameOver() && !self.isGameWon()) {
                 self.draw();
-            } else {
+            } else if (self.isGameOver()) {
                 self.drawGameOver();
+                stopGame();
+            } else if (self.isGameWon()) {
+                self.drawGameWon();
+                stopGame();
             }
         });
     };
@@ -170,9 +199,6 @@ class World{
             this.flipImage(mo);
         }
         mo.draw(this.ctx);
-        if(mo instanceof MovableObject){
-            mo.drawFrame(this.ctx);
-        }
         if(mo.otherDirection){
             this.flipImageBack(mo);
         }
@@ -206,10 +232,65 @@ class World{
                 scaledWidth,
                 scaledHeight
             );
+        document.getElementById('gameOverMenu').classList.remove('d-none');
         };
     }
 
-    isGameOver(){
-        return this.character.isDead() || this.level.enemies.find(e => e instanceof Endboss).isDead();
+    // ...existing code...
+
+    drawGameWon(){
+        let gameWonImg = new Image();
+        gameWonImg.src = 'img/9_intro_outro_screens/win/win_1.png'; // Use appropriate win image
+        gameWonImg.onload = () => {
+            // Draw the win image (if you have one)
+            const scaledWidth = gameWonImg.width * 0.5;
+            const scaledHeight = gameWonImg.height * 0.5;
+            this.ctx.drawImage(
+                gameWonImg, 
+                this.canvas.width/2 - scaledWidth/2, 
+                this.canvas.height/2 - scaledHeight/2,
+                scaledWidth,
+                scaledHeight
+            );
+            
+            // Draw "You Won!" text
+            this.drawWinText();
+            
+            // Show restart button
+            document.getElementById('gameOverMenu').classList.remove('d-none');
+        };
+        
+        // If no win image exists, just draw the text
+        gameWonImg.onerror = () => {
+            this.drawWinText();
+            document.getElementById('gameOverMenu').classList.remove('d-none');
+        };
     }
+
+    drawWinText(){
+        // Set text properties
+        this.ctx.fillStyle = '#FFD700'; // Gold color
+        this.ctx.strokeStyle = '#000';
+        this.ctx.lineWidth = 3;
+        this.ctx.font = 'bold 60px Arial';
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        
+        const centerX = this.canvas.width / 2;
+        const centerY = this.canvas.height / 2;
+        
+        // Draw text with stroke (outline)
+        this.ctx.strokeText('YOU WON!', centerX, centerY);
+        // Draw filled text
+        this.ctx.fillText('YOU WON!', centerX, centerY);
+    }
+
+    isGameOver(){
+        return this.character.isDead();
+    }
+
+    isGameWon(){
+        return this.level.enemies.find(e => e instanceof Endboss).isDead();
+    }
+
 }

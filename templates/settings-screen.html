@@ -1,42 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Pollo loco</title>
-    <link rel="stylesheet" href="/style.css">
-    <link rel="shortcut icon" href="../img/3_enemies_chicken/chicken_normal/1_walk/1_w.png" type="image/x-icon">
-    <script src="../js/settings.js"></script>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>El Pollo loco - Settings</title>
+        <link rel="stylesheet" href="/style.css">
+        <link rel="shortcut icon" href="../img/3_enemies_chicken/chicken_normal/1_walk/1_w.png" type="image/x-icon">
+        <link rel="stylesheet" href="https://use.typekit.net/wmt6kfx.css">
+        <script src="../js/settings.js"></script>
+    </head>
 
-<body onload="loadSettings()">
-    <div class="">
-        <h1 id="title" class="">El Pollo loco Settings</h1>
-        <div class="help-screen">
-            <div class="game-menu">
-                <div class="explanation">
+    <body onload="loadSettings()" style="background-image: url(../img/game-background.png);">
+        <div class="wrapper">
+            <div class="help-screen settings-screen">
+                <h1>
+                    <img src="../img/6_salsa_bottle/1_salsa_bottle_on_ground.png" alt=""> El Pollo Loco – Settings
+                </h1>
+
+                <div class="settings-instructions">
                     <span>Sound</span>
-                    <input onchange="saveSettings()" type="checkbox" id="sound" name="sound" checked>
+                    <label class="switch">
+                        <input type="checkbox" onchange="saveSettings()" type="checkbox" id="sound" name="sound" checked>
+                        <span class="slider round"></span>
+                    </label>
                 </div>
-                <div class="explanation">
+
+                <div class="settings-instructions">
                     <span>Music</span>
-                    <input onchange="saveSettings()" type="checkbox" id="music" name="music" checked>
+                    <label class="switch">
+                        <input type="checkbox" onchange="saveSettings()" type="checkbox" id="music" name="music" checked>
+                        <span class="slider round"></span>
+                    </label> 
                 </div>
-                <div class="explanation">
-                    <img class="rotate-90" src="../img/arrow-key.png" alt="Arrow to left">
-                    <span>Jump</span>
-                </div>
-                <div class="explanation">
-                    <img src="../img/d-key.png" alt="Arrow to left">
-                    <span>Throw Bottle</span>
+
+                <div class="back-btn-container">
+                    <a href="../index.html">
+                        🡄 Back to Game
+                    </a>
                 </div>
             </div>
         </div>
-        <a class="close" href="../index.html">Close</a>
-    </div>
-
-</body>
-
+    </body>
 </html>
+

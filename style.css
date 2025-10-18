@@ -9,23 +9,23 @@ body{
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-image: url('img/body-bg.jpg');
+    background-image: url('img/start-screen.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    font-family: 'zabars', Arial, Helvetica, sans-serif;
+    font-family: 'cooper-black-std', Arial, Helvetica, sans-serif;
     height: 100vh;
     box-sizing: border-box;
 }
 
 .wrapper{
+    padding: 50px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-around;
-    font-family: 'zabars', Arial, Helvetica, sans-serif;
+    font-family: 'cooper-black-std', Arial, Helvetica, sans-serif;
     box-sizing: border-box;
-    height: 100vh;
+    height: 100%;
 }
 
 canvas{
@@ -43,23 +43,10 @@ h1{
     text-shadow: 2px 2px 8px rgba(66, 18, 18, 0.5);
 }
 
-.fullScreen{
-    width: 50px;
-    height: 50px;
+.text-small{
+    font-size: 16px !important;
 }
 
-.explanation{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 30px;
-}
-
-.explanation div{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
 
 .game-menu{
     margin-top: 20px;
@@ -67,89 +54,85 @@ h1{
     justify-content: space-between;
 }
 
-.game-menu img{
+.full-screen-btn{
     width: 40px;
     height: 40px;
     cursor: pointer;
 }
 
-
-
-.container{
-    width: 60%;
+.start-btn{
+    position: absolute;
+    bottom: 35%;
+    cursor: pointer;
+    width: 300px;
+    transition: all 175ms ease-in-out;
 }
 
-.container img{
-    width: 100%;
-    object-fit: contain;
-    max-width: 1600px;
+.start-btn:hover{
+    transform: scale(1.05);
+    transition: all 175ms ease-in-out;
 }
 
-@media (max-width: 1020px){
-    .container{
-        width: 80%;
-    }
+.stop-game-btn{
+    width: 200px;
+    cursor: pointer;
+    transition: all 175ms ease-in-out   ;
+}
+
+.stop-game-btn:hover{
+    transform: scale(1.1);
+    transition: all 175ms ease-in-out;
 }
 
 .menu{
+    position: absolute;
+    bottom: 5%;
+    right: 10%;
     display: flex;
     gap: 20px;
-    justify-content: space-between;
-    width: 60vw;
 }
 
-
-.menu .item{
-    width: 30%;
-    transition: all 175ms ease-in-out;
-}
-
-.menu a img{
-    width: 100%;
-    height: auto;
-}
-
-.menu .item:hover{
-    transform: scale(1.05);
-    transition: all 175ms ease-in-out;
+.menu .item img{
+    width: 120px;
     cursor: pointer;
+    transition: all 175ms ease-in-out;
+}
+
+.menu .item img:hover{
+    transform: scale(1.1);
+    transition: all 175ms ease-in-out;
 }
 
 .d-none{
-    display: none;
+    display: none !important;
 }
 
-.help-screen{
-    background-color: rgba(255, 255, 255, 0.6);
+
+
+
+.game-over-menu {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+.restart-btn {
+    background-color: #ff6b00;
+    color: white;
+    border: 3px solid #000;
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
     border-radius: 10px;
-    padding: 40px;
+    margin-top: 100px;
 }
 
-.help-screen .game-menu{
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-    gap: 20px;
+.restart-btn:hover {
+    background-color: #ff8533;
 }
-
-.help-screen .game-menu span{
-    white-space: nowrap;
-    margin-left: 20px;
-}
-
-.rotate-90{
-    transform: rotate(90deg);
-}
-
-.rotate-180{
-    transform: rotate(180deg);
-}
-
-.rotate-270{
-    transform: rotate(270deg);
-}
-
-
 
 .close{
     background-color: rgb(66, 18, 18);
@@ -183,4 +166,164 @@ h1{
     body{
         padding: 0;
     }
+}
+
+
+
+/* Help Screen Styles */
+
+.help-screen{
+    max-width: 650px;
+    margin: 40px auto;
+    padding: 24px;
+    background: #fff3e0;
+    border-radius: 18px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+    color: #3e2723;
+}
+
+.help-screen h1{
+    text-align:center;
+    color:#ea7827; 
+    font-size: 2em;
+    margin-bottom: 0.4em;
+    display: flex;
+    align-items: center;
+    text-shadow: none!important;
+}
+
+.help-screen h1 img{
+    margin-right: 15px;
+    width: 80px;
+}
+
+.help-screen h2{
+    color:#ea7827;
+    font-size: 1.5em;
+    margin-bottom: 0.5em;
+}
+
+.help-screen p{
+    font-size: 1.1em;
+    line-height: 1.6;
+    font-family: 'Trebuchet MS', 'Comic Sans MS', sans-serif;
+}
+
+.help-screen hr{
+    margin: 24px 0;
+    border: none;
+    border-top: 2px dashed #ea7827;
+}
+
+.help-screen ul{
+    list-style: none;
+    padding-left: 0;
+    font-size: 1.05em;
+    line-height: 1.6;
+    font-family: 'Trebuchet MS', 'Comic Sans MS', sans-serif;
+}
+
+.help-screen .back-btn-container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.help-screen .back-btn-container a{
+    text-decoration: none;
+    background-color: #ea7827;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 5px;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+}
+
+.help-screen .back-btn-container a:hover{
+    background-color: #9f531c;
+}
+
+.settings-instructions{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 80%;
+    gap: 30px;
+    margin: 20px 0;
+    font-size: 24px
+}
+
+
+.settings-screen{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.settings-screen .back-btn-container{
+    margin-top: 80px;
+}
+
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #9f531c;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #9f531c;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }
