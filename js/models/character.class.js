@@ -1,17 +1,4 @@
 class Character extends MovableObject{
-
-    y = 80;
-    height= 250;
-    width = 150;
-    speed = 4;
-
-    collectedBottles = 0;
-    collectedCoins = 0;
-
-    lastMove;
-
-    hurt_sound = new Audio('audio/hurt.mp3');
-
     IMAGES_IDLE = [
         '../img/2_character_pepe/1_idle/idle/I-1.png',
         '../img/2_character_pepe/1_idle/idle/I-2.png',
@@ -74,9 +61,16 @@ class Character extends MovableObject{
         '../img/2_character_pepe/4_hurt/H-43.png'
     ]
 
+    y = 80;
+    height= 250;
+    width = 150;
+    speed = 4;
+    collectedBottles = 0;
+    collectedCoins = 0;
+    lastMove;
     world;
-    walking_sound = new Audio('audio/running.mp3');
-
+    hurtSound = new Audio('audio/hurt.mp3');
+    walkingSound = new Audio('audio/running.mp3');
 
     constructor(){
         super().loadImage('../img/2_character_pepe/2_walk/W-21.png');
@@ -98,48 +92,76 @@ class Character extends MovableObject{
 
     }
 
-    animate(){   
+    animate(){
+        if (!this.animationStarted) {
+            this.moveAnimation();
+            this.animateImages();
+            this.animationStarted = true;
+        }
+    }
+
+    fallDown(){
+        this.y += 30;
+        this.x += 30;
+    }
+
+    shouldMoveRight(){
+        return (this.world.keyboard.RIGHT || this.world.keyboard.D) && this.x < this.world.level.levelEndX;
+    }
+
+    shouldWalkLeft(){
+        return (this.world.keyboard.LEFT || this.world.keyboard.A) && this.x > -600;
+    }
+
+    shouldJump(){
+        return (this.world.keyboard.SPACE || this.world.keyboard.UP || this.world.keyboard.W) && !this.isAboveGround();
+    }
+
+    walkRight(){
+        this.moveRight();
+        this.otherDirection = false;
+        this.walkingSound.volume = 1;
+        this.playSound(this.walkingSound);
+        this.setLastMove();
+    }
+
+    walkLeft(){
+        this.moveLeft();
+        this.otherDirection = true;
+        this.walkingSound.volume = 1;
+        this.playSound(this.walkingSound);
+        this.setLastMove();
+    }
+
+    moveAnimation(){
         setStoppableInterval(() => {
-            this.walking_sound.pause();
-            if((this.world.keyboard.RIGHT || this.world.keyboard.D) && this.x < this.world.level.level_end_x){
-                this.moveRight();
-                this.otherDirection = false;
-                if (isSoundActivated()) {
-                    this.walking_sound.volume = 1;
-                    this.walking_sound.play().catch(e => console.log("Walking sound failed:", e));
-                }
-                this.setLastMove();
+            this.walkingSound.pause();
+            if (this.isDead()) return;
+            if (this.shouldMoveRight()) {
+                this.walkRight();
             }
-
-            if((this.world.keyboard.LEFT || this.world.keyboard.A) && this.x > -600){
-                this.moveLeft();
-                this.otherDirection = true;
-                if (isSoundActivated()) {
-                    this.walking_sound.volume = 1;
-                    this.walking_sound.play().catch(e => console.log("Walking sound failed:", e));
-                }
-                this.setLastMove();
+            if (this.shouldWalkLeft()) {
+                this.walkLeft();
             }
-
-            if((this.world.keyboard.SPACE || this.world.keyboard.UP || this.world.keyboard.W) && !this.isAboveGround()){
+            if (this.shouldJump()) {
                 this.jump();
                 this.setLastMove();
             }
-
             this.world.camera_x = -this.x + 100;
         }, 1000/60);
+    }
 
+    animateImages(){
         setStoppableInterval(() => {
-            this.hurt_sound.pause();
+            this.hurtSound.pause();
             if(this.isDead()){
                 this.playAnimation(this.IMAGES_DEAD);
+                this.fallDown();
             } else if(this.isAboveGround()){
                 this.playAnimation(this.IMAGES_JUMPING);
             } else if(this.isHurt()){
                 this.playAnimation(this.IMAGES_HURT);
-                if (isSoundActivated()) {
-                    this.hurt_sound.play().catch(e => console.log("Hurt sound failed:", e));
-                }
+                this.playSound(this.hurtSound);
             } else if(this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.D || this.world.keyboard.A){
                 this.playAnimation(this.IMAGES_WALKING);
             } else if(this.isLongIdle()){

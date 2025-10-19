@@ -4,11 +4,6 @@ let keyboard = new Keyboard();
 let intervalIds = [];
 let background_sound = new Audio('audio/background.mp3');
 
-function init(){
-
-}
-
-
 /**
  * Initializes and starts the game.
  * This function hides the game over menu, initializes the level,
@@ -17,11 +12,12 @@ function init(){
  * @returns {void}
  */
 function startGame(){
-    document.getElementById('gameOverMenu').classList.add('d-none');
+    console.log('Game started');
+    document.getElementById('restart-btn').classList.add('d-none');
+    intervalIds = [];
     initLevel();
     showGameScreen();
     playMusic();
-    intervalIds = [];
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
 };
@@ -69,6 +65,7 @@ function showStartscreen(){
     document.getElementById('body').style.backgroundImage = "url('img/start-screen.png')";
     document.getElementById('menu').classList.remove('d-none');
     document.getElementById('start-game-btn').classList.remove('d-none');
+    document.getElementById('restart-btn').classList.add('d-none');
 }
 
 /**
@@ -105,9 +102,13 @@ function fullScreen() {
 function playMusic() {
     background_sound.loop = true;
     background_sound.volume = 0.3;
-    if (isMusicActivated()) {
-        background_sound.play();
-    }
+    setStoppableInterval(() => {
+        if (isMusicActivated()) {
+            background_sound.play();
+        } else {
+            background_sound.pause();
+        }
+    }, 500);
 }
 
 /**
@@ -147,11 +148,6 @@ function exitFullscreen() {
     }
 }
 
-
-
-function showEndScreen(){
-    
-}
 
 window.addEventListener("keydown", (e) => {
     switch (e.code) {

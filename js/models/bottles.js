@@ -4,6 +4,8 @@ class ThrowableBottle extends MovableObject{
     splash = false;
     splashed = false;
     otherDirection = false;
+    height = 60;
+    width = 50
 
     SPLASH_IMAGES = [
         '../img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png',
@@ -31,8 +33,6 @@ class ThrowableBottle extends MovableObject{
         super.loadImage('img/6_salsa_bottle/salsa_bottle.png');
         this.loadImages(this.ROTATE_IMAGES);
         this.loadImages(this.SPLASH_IMAGES);
-        this.height= 60;
-        this.width = 50;
         this.throw(100, 200);
         this.animate();
     }
@@ -99,10 +99,10 @@ class ThrowableBottle extends MovableObject{
                     this.splashingAnimation();
                     break;
                 case 'finished':
-                    this.removeFromWorld(200);
+                    this.removeFromWorld(100);
                     break;
             }
-        }, 100);
+        }, 50);
     }
 
     /**
@@ -135,6 +135,7 @@ class ThrowableBottle extends MovableObject{
     }
 }
 
+
 class CollectableBottle extends DrawableObject{
     width = 60;
     height = 50;
@@ -143,7 +144,7 @@ class CollectableBottle extends DrawableObject{
 
     constructor(img, y = undefined){
         super().loadImage(img);
-        this.x = 200 + Math.floor(Math.random() * 1400);
+        this.x = this.getWeightedRandomPosition();
         this.y = y !== undefined ? y : 100 + Math.floor(Math.random() * 300);
     }
 

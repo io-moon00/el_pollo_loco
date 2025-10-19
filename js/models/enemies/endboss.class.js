@@ -42,6 +42,7 @@ class Endboss extends MovableObject {
 
 
     y = 100;
+    x = 5 * 719;
     width = 350;
     height = 350;
     life = 20;
@@ -49,6 +50,10 @@ class Endboss extends MovableObject {
     first_contact = false;
     is_alert = false;
     world;
+    attacking_sound = new Audio('audio/boss_attack.mp3');
+    hurt_sound = new Audio('audio/boss_hurt.mp3');
+    dead_animation_completed = false;
+    dead_images_index = 0;
 
     constructor(){
         super().loadImage(this.IMAGES_WALKING[3]);
@@ -57,7 +62,6 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_ATTACK);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
-        this.x = 2000;
         this.offset = {
             top: 50,
             left: 50,
@@ -114,7 +118,7 @@ class Endboss extends MovableObject {
      * @returns {boolean} - True if the boss is able to move forward, otherwise false.
      */
     canMoveForward(){
-        return (!this.isDead() && !this.isHurt()) && this.first_contact || (!this.first_contact && this.characterIsInRange);
+        return (!this.isDead() && !this.isHurt()) && this.first_contact || (!this.first_contact && this.characterIsInRange && this.world.character.x > 168);
     }
 
     /**
@@ -165,11 +169,19 @@ class Endboss extends MovableObject {
      * @returns {void}
      */
     playCurrentAnimation() {
+        this.attacking_sound.pause();
+        this.hurt_sound.pause();
         if(this.isDead()){
             this.playAnimation(this.IMAGES_DEAD);
+            this.dead_images_index++;
+            if(this.dead_images_index >= this.IMAGES_DEAD.length*3){
+                this.dead_animation_completed = true;
+            }
         } else if(this.isHurt()){
+            this.playSound(this.hurt_sound);
             this.playAnimation(this.IMAGES_HURT);
         } else if(this.isAttacking()){
+            this.playSound(this.attacking_sound);
             this.playAnimation(this.IMAGES_ATTACK);
         } else if (this.is_alert){
             this.playAnimation(this.IMAGES_ALERT);

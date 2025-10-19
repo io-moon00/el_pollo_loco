@@ -47,3 +47,54 @@ function saveSettings() {
     const musicCheckbox = document.getElementById("music");
     localStorage.setItem("music", musicCheckbox.checked);
 }
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const muteBtn = document.getElementById('mute-btn');
+    if (muteBtn) {
+        muteBtn.addEventListener('click', toggleMute);
+    }
+
+});
+
+function isMuted() {
+    const soundSetting = localStorage.getItem("sound");
+    const musicSetting = localStorage.getItem("music");
+    return (soundSetting === "false" && musicSetting === "false");
+}
+
+function toggleMute() {
+    let muted = isMuted();
+    muted = !muted;
+    const soundOnIcon = document.querySelector('.sound-on');
+    const soundOffIcon = document.querySelector('.sound-off');
+    
+    if (muted) {
+        soundOnIcon.classList.add('d-none');
+        soundOffIcon.classList.remove('d-none');
+        // Mute all current playing sounds
+        localStorage.setItem('sound', 'false');
+        localStorage.setItem('music', 'false');
+    } else {
+        soundOnIcon.classList.remove('d-none');
+        soundOffIcon.classList.add('d-none');
+
+        localStorage.setItem('sound', 'true');
+        localStorage.setItem('music', 'true');
+    }
+    
+}
+
+function setMuted() {
+    const muted = isMuted();
+    const soundOnIcon = document.querySelector('.sound-on');
+    const soundOffIcon = document.querySelector('.sound-off');
+
+    if (muted) {
+        soundOnIcon.classList.add('d-none');
+        soundOffIcon.classList.remove('d-none');
+    } else {
+        soundOnIcon.classList.remove('d-none');
+        soundOffIcon.classList.add('d-none');
+    }
+}

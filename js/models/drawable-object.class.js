@@ -12,8 +12,7 @@ class DrawableObject {
         right: 0,
         bottom: 0
     };
-
-    currentAnimationImage = null;
+    range = 4 * 719 - 200;
 
 
     /**
@@ -45,12 +44,6 @@ class DrawableObject {
      * @param {string[]} images - An array of image paths that constitute the animation frames.
      */
     playAnimation(images){
-        // Reset currentImage if animation changed
-        if (this.currentAnimationImages !== images) {
-            this.currentImage = 0;
-            this.currentAnimationImages = images;
-        }
-        
         let i = this.currentImage % images.length;
         let path = images[i];
         this.img = this.imageCache[path];
@@ -86,4 +79,24 @@ class DrawableObject {
             this.y = -1000;
         }, timeout);
     }
+
+    getWeightedRandomPosition() {
+    const zones = [
+        { start: 300, end: 719, weight: 0.15 },      // Early game - lower density
+        { start: 719, end: 2*719, weight: 0.35 },   // Mid game - higher density
+        { start: 2*719, end: 3*719, weight: 0.35 }, // Late game - higher density
+        { start: 3*719, end: 4*719-200, weight: 0.15 } // End game - some objects near finish
+    ];
+    
+    const random = Math.random();
+    let cumulativeWeight = 0;
+    
+    for (let zone of zones) {
+        cumulativeWeight += zone.weight;
+        if (random <= cumulativeWeight) {
+            return zone.start + Math.random() * (zone.end - zone.start);
+        }
+    }
+    return 300 + Math.random() * (this.range - 100);
+}
 }

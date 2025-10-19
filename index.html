@@ -1,53 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Pollo loco</title>
-    <link rel="stylesheet" href="/style.css">
-    <link rel="shortcut icon" href="img/3_enemies_chicken/chicken_normal/1_walk/1_w.png" type="image/x-icon">
-    <link rel="stylesheet" href="https://use.typekit.net/wmt6kfx.css">
-    <script src="../js/settings.js"></script>
-    <script src="js/models/drawable-object.class.js"></script>
-    <script src="js/models/movable-objects.class.js"></script>
-    <script src="js/models/character.class.js"></script>
-    <script src="js/models/enemies/chicken.class.js"></script>
-    <script src="js/models/enemies/endboss.class.js"></script>
-    <script src="js/models/cloud.class.js"></script>
-    <script src="js/models/status-bar.class.js"></script>
-    <script src="js/models/world.class.js"></script>
-    <script src="js/models/background-object.class.js"></script>
-    <script src="js/models/keyboard.class.js"></script>
-    <script src="js/models/level.class.js"></script>
-    <script src="js/models/bottles.js"></script>
-    <script src="js/models/coins.class.js"></script>
-    <script src="js/levels/level1.js"></script>
-    <script src="js/game.js"></script>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>El Pollo loco</title>
+        <link rel="stylesheet" href="/style.css">
+        <link rel="shortcut icon" href="img/3_enemies_chicken/chicken_normal/1_walk/1_w.png" type="image/x-icon">
+        <link rel="stylesheet" href="https://use.typekit.net/wmt6kfx.css">
+        <script src="../js/settings.js"></script>
+        <script src="js/models/drawable-object.class.js"></script>
+        <script src="js/models/movable-objects.class.js"></script>
+        <script src="js/models/character.class.js"></script>
+        <script src="js/models/enemies/chicken.class.js"></script>
+        <script src="js/models/enemies/endboss.class.js"></script>
+        <script src="js/models/cloud.class.js"></script>
+        <script src="js/models/status-bar.class.js"></script>
+        <script src="js/models/world-endscreen.class.js"></script>
+        <script src="js/models/world-physics.class.js"></script>
+        <script src="js/models/world.class.js"></script>
+        <script src="js/models/background-object.class.js"></script>
+        <script src="js/models/keyboard.class.js"></script>
+        <script src="js/models/level.class.js"></script>
+        <script src="js/models/bottles.js"></script>
+        <script src="js/models/coins.class.js"></script>
+        <script src="js/levels/level1.js"></script>
+        <script src="js/game.js"></script>
+    </head>
 
-<body id="body" onload="init();">
-    <div class="wrapper">
-        <h1 id="title" class="d-none">El Pollo loco</h1>
+    <body id="body" onload="setMuted()">
+        <div class="wrapper">
+            <h1 id="title" class="d-none">El Pollo loco</h1>
 
-        <div id="game" class="game d-none">
-            <canvas id="canvas" width="720" height="480"></canvas>
-            <div class="game-menu">
-                <img class="stop-game-btn" onclick="resetGame()" src="img/stop-game-btn.png" alt="Stop Game" />
-                <img onclick="fullScreen()" class="full-screen-btn" src="img/fullScreen.png" alt="full Screen" />
+            <div id="game" class="game d-none">
+                <div class="game-controls">
+                    <button id="mute-btn" class="mute-button">
+                        <span class="sound-on">🔊</span>
+                        <span class="sound-off d-none">🔇</span>
+                    </button>
+                </div>
+                <canvas id="canvas" width="720" height="480"></canvas>
+                <div class="game-menu">
+                    <div>
+                        <img class="stop-game-btn" onclick="resetGame()" src="img/stop-game-btn.png" alt="Stop Game" />
+                        <img id="restart-btn" class="stop-game-btn d-none" onclick="startGame()" src="img/restart-btn.png" alt="Restart Game" />
+                    </div>
+                    <img onclick="fullScreen()" class="full-screen-btn" src="img/fullScreen.png" alt="full Screen" />
+                </div>
             </div>
-            <div id="gameOverMenu" class="game-over-menu d-none">
-                <button class="restart-btn" onclick="startGame()">RESTART GAME</button>
+            <img id="start-game-btn" onclick="startGame()" class="start-btn" src="img/start-btn.png" alt="Start Button">
+            
+            <div id="menu" class="menu">
+                <a class="item" href="templates/help-screen.html"><img src="img/help-btn.png" alt="Help"></a>
+                <a class="item" href="templates/settings-screen.html"><img src="img/settings-btn.png" alt="Settings"></a>
             </div>
         </div>
-        <img id="start-game-btn" onclick="startGame()" class="start-btn" src="img/start-btn.png" alt="Start Button">
-        
-        <div id="menu" class="menu">
-            <a class="item" href="templates/help-screen.html"><img src="img/help-btn.png" alt="Help"></a>
-            <a class="item" href="templates/settings-screen.html"><img src="img/settings-btn.png" alt="Settings"></a>
-        </div>
-    </div>
-</body>
-
+    </body>
 </html>

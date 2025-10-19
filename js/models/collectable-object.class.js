@@ -3,12 +3,14 @@ class CollectableObject extends DrawableObject {
     height = 50;
     is_collected = false;
     collect_sound = null; // Will be set by child classes
+    range_x = 4 * 719 - 200;
+    range_y = 300;
 
     constructor(imagePath, x = undefined, y = undefined) {
         super();
         this.loadImage(imagePath);
-        this.x = x !== undefined ? x : 200 + Math.floor(Math.random() * 1400);
-        this.y = y !== undefined ? y : 100 + Math.floor(Math.random() * 300);
+        this.x = x !== undefined ? x : 200 + Math.floor(Math.random() * this.range_x);
+        this.y = y !== undefined ? y : 100 + Math.floor(Math.random() * this.range_y);
     }
 
     /**
@@ -18,7 +20,6 @@ class CollectableObject extends DrawableObject {
      */
     collect() {
         if (this.is_collected) return; // Prevent double collection
-        
         this.is_collected = true;
         this.playCollectionSound();
         this.removeFromWorld(50);
