@@ -3,6 +3,11 @@ class WorldPhysics {
         this.world = world;
     }
 
+    /**
+     * Manages all collision checks within the game world.
+     * It calls specific methods to handle each type of collision.
+     * @returns {void}
+     */
     checkCollisions(){
         this.checkEnemyCollision();
         this.checkCoinCollision();
@@ -12,9 +17,8 @@ class WorldPhysics {
         this.checkCollisionsBottleEndboss();
     }
 
-        /**
+    /**
      * Checks if the character is colliding with a specific chicken enemy that is still alive.
-     * This is a more specific collision check than the generic `isColliding` method.
      * @param {MovableObject} enemy - The enemy object (expected to be a Chicken) to check for collision against the character.
      * @returns {boolean} - Returns `true` if the character is colliding with the given enemy, the enemy is an instance of Chicken, and the enemy is not dead. Otherwise, returns `false`.
      */
@@ -24,8 +28,6 @@ class WorldPhysics {
 
     /**
      * Checks if the character is colliding with the Endboss enemy.
-     * This method verifies if the character is currently colliding with a given enemy object,
-     * specifically checking if that enemy is an instance of the Endboss class and is not already dead.
      * @param {MovableObject} enemy - The enemy object to check for collision against the character. Expected to be an Endboss.
      * @returns {boolean} - Returns `true` if the character is colliding with the Endboss and the Endboss is alive. Otherwise, returns `false`.
      */
@@ -53,6 +55,12 @@ class WorldPhysics {
         });
     }
 
+    /**
+     * Checks for and handles collisions between the character and the endboss.
+     * If the character collides with the endboss and is not currently in a hurt state,
+     * the character takes damage, and the health status bar is updated to reflect the new health percentage.
+     * @returns {void}
+     */
     checkEndbossCollision(){
         if (this.isCollidingWithEndboss() && !this.world.character.isHurt()){
             this.world.character.hit();
@@ -68,7 +76,7 @@ class WorldPhysics {
      */
     checkCoinCollision(){
         this.world.level.coins.forEach((coin) => {
-            if(this.world.character.isColliding(coin) && !coin.is_collected){
+            if(this.world.character.isColliding(coin) && !coin.isCollected){
                 coin.collect();
                 this.world.character.collectedCoins += 1;
             }
@@ -83,13 +91,12 @@ class WorldPhysics {
      */
     checkBottleCollision(){
         this.world.level.collectableBottles.forEach((bottle) => {
-            if(this.world.character.isColliding(bottle) && !bottle.is_collected){
+            if(this.world.character.isColliding(bottle) && !bottle.isCollected){
                 bottle.collect();
                 this.world.character.collectedBottles += 1;
             } 
         })
     }
-
 
     /**
      * Checks for and handles collisions between thrown bottles and enemies.
@@ -113,6 +120,14 @@ class WorldPhysics {
         });
     }
 
+    /**
+     * Checks for and handles collisions between thrown bottles and the endboss.
+     * It iterates through all active throwable bottles. If a bottle collides with the endboss
+     * and the endboss is not currently in a hurt state, the bottle starts its splashing animation,
+     * the endboss takes damage, and the loop is broken to prevent one bottle from hitting
+     * the endboss multiple times in a single check.
+     * @returns {void}
+     */
     checkCollisionsBottleEndboss() {
         if (this.world.throwableBottles.length === 0) return;
         for (let i = 0; i < this.world.throwableBottles.length; i++) {
@@ -124,5 +139,4 @@ class WorldPhysics {
             }
         }
     }
-
 }

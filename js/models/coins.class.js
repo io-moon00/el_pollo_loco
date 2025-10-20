@@ -2,8 +2,8 @@ class Coin extends DrawableObject{
 
     width = 50;
     height = 50;
-    collect_sound = new Audio('audio/collect_coin.mp3');
-    is_collected = false;
+    collectedSound = new Audio('audio/collect_coin.mp3');
+    isCollected = false;
 
     constructor(){
         super().loadImage('../img/8_coin/coin_1.png');
@@ -17,12 +17,12 @@ class Coin extends DrawableObject{
      * @returns {void}
      */
     collect(){
-        this.is_collected = true;
-        this.collect_sound.volume = 0.1;
-        this.playSound(this.collect_sound);
+        this.isCollected = true;
+        this.collectedSound.volume = 0.1;
+        this.playSound(this.collectedSound);
         this.removeFromWorld(50);
         setTimeout(() => {
-            this.collect_sound.pause();
+            this.collectedSound.pause();
         }, 200);
     }
 }

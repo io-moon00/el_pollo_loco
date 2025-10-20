@@ -139,8 +139,8 @@ class ThrowableBottle extends MovableObject{
 class CollectableBottle extends DrawableObject{
     width = 60;
     height = 50;
-    collect_sound = new Audio('audio/collect_bottle.mp3');
-    is_collected = false;
+    collectedSound = new Audio('audio/collect_bottle.mp3');
+    isCollected = false;
 
     constructor(img, y = undefined){
         super().loadImage(img);
@@ -155,11 +155,11 @@ class CollectableBottle extends DrawableObject{
      * @returns {void}
      */
     collect(){
-        this.is_collected = true;
-        this.playSound(this.collect_sound);
+        this.isCollected = true;
+        this.playSound(this.collectedSound);
         this.removeFromWorld(50);
         setTimeout(() => {
-            this.collect_sound.pause();
+            this.collectedSound.pause();
         }, 200);
     }
 }

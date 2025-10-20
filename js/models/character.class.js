@@ -71,6 +71,7 @@ class Character extends MovableObject{
     world;
     hurtSound = new Audio('audio/hurt.mp3');
     walkingSound = new Audio('audio/running.mp3');
+    snoreSound = new Audio('audio/snore_sound.mp3');
 
     constructor(){
         super().loadImage('../img/2_character_pepe/2_walk/W-21.png');
@@ -92,6 +93,10 @@ class Character extends MovableObject{
 
     }
 
+    /**
+     * Starts the character's movement and image animations.
+     * @returns {void}
+     */
     animate(){
         if (!this.animationStarted) {
             this.moveAnimation();
@@ -100,23 +105,47 @@ class Character extends MovableObject{
         }
     }
 
+    /**
+     * Simulates the character falling down and forward after dying.
+     * @returns {void}
+     */
     fallDown(){
         this.y += 30;
         this.x += 30;
     }
 
+    /**
+     * Checks if the character should move to the right.
+     * This is true if the right arrow key or 'D' key is pressed and the character has not reached the end of the level.
+     * @returns {boolean} - True if the character should move right, false otherwise.
+     */
     shouldMoveRight(){
         return (this.world.keyboard.RIGHT || this.world.keyboard.D) && this.x < this.world.level.levelEndX;
     }
 
+    /**
+     * Checks if the character should move to the left.
+     * This is true if the left arrow key or 'A' key is pressed and the character has not reached the left boundary of the level.
+     * @returns {boolean} - True if the character should move left, false otherwise.
+     */
     shouldWalkLeft(){
         return (this.world.keyboard.LEFT || this.world.keyboard.A) && this.x > -600;
     }
 
+    /**
+     * Checks if the character should perform a jump.
+     * This is true if the space, up arrow, or 'W' key is pressed and the character is not currently in the air.
+     * @returns {boolean} - True if the jump conditions are met, false otherwise.
+     */
     shouldJump(){
         return (this.world.keyboard.SPACE || this.world.keyboard.UP || this.world.keyboard.W) && !this.isAboveGround();
     }
 
+    /**
+     * Handles the character's rightward movement.
+     * Sets the direction, plays the walking sound, and updates the last move timestamp.
+     * @returns {void}
+     */
     walkRight(){
         this.moveRight();
         this.otherDirection = false;
@@ -125,6 +154,11 @@ class Character extends MovableObject{
         this.setLastMove();
     }
 
+    /**
+     * Handles the character's leftward movement.
+     * Sets the direction, plays the walking sound, and updates the last move timestamp.
+     * @returns {void}
+     */
     walkLeft(){
         this.moveLeft();
         this.otherDirection = true;
@@ -133,6 +167,11 @@ class Character extends MovableObject{
         this.setLastMove();
     }
 
+    /**
+     * Sets up a recurring interval to handle character movement based on keyboard input.
+     * It checks for right, left, and jump actions, and updates the camera position.
+     * @returns {void}
+     */
     moveAnimation(){
         setStoppableInterval(() => {
             this.walkingSound.pause();
@@ -147,13 +186,19 @@ class Character extends MovableObject{
                 this.jump();
                 this.setLastMove();
             }
-            this.world.camera_x = -this.x + 100;
+            this.world.cameraX = -this.x + 100;
         }, 1000/60);
     }
 
+    /**
+     * Sets up a recurring interval to manage the character's image animations based on its current state.
+     * It checks for conditions such as being dead, in the air, hurt, walking, or idle, and plays the corresponding animation.
+     * @returns {void}
+     */
     animateImages(){
         setStoppableInterval(() => {
             this.hurtSound.pause();
+            this.snoreSound.pause();
             if(this.isDead()){
                 this.playAnimation(this.IMAGES_DEAD);
                 this.fallDown();
@@ -166,22 +211,39 @@ class Character extends MovableObject{
                 this.playAnimation(this.IMAGES_WALKING);
             } else if(this.isLongIdle()){
                 this.playAnimation(this.IMAGES_IDLE_LONG)
+                this.playSound(this.snoreSound);
             } else{
                 this.playAnimation(this.IMAGES_IDLE);
             }
         }, 100);
     }
 
+    /**
+     * Checks if the character has been idle for a long period.
+     * Calculates the time elapsed since the last recorded movement.
+     * @returns {boolean} - True if the idle time is greater than 4 seconds, otherwise false.
+     */
     isLongIdle() {
         let idleTime = new Date().getTime() - this.lastMove;
         idleTime = idleTime / 1000;
         return idleTime > 4;
     }
 
+    /**
+     * Updates the timestamp of the character's last recorded movement.
+     * This is used to determine if the character has been idle for a long time.
+     * @returns {void}
+     */
     setLastMove() {
         this.lastMove = new Date().getTime();
     }
 
+    /**
+     * Checks if the character is currently falling down.
+     * This is determined by checking if the vertical speed is negative (indicating downward movement)
+     * and if the character is above the ground.
+     * @returns {boolean} - True if the character is falling, false otherwise.
+     */
     isFlyingDown() {
         if (this.speedY < 0 && this.isAboveGround()){
             return true;

@@ -52,7 +52,7 @@ class Endboss extends MovableObject {
     world;
     attacking_sound = new Audio('audio/boss_attack.mp3');
     hurt_sound = new Audio('audio/boss_hurt.mp3');
-    dead_animation_completed = false;
+    deadAnimationCompleted = false;
     dead_images_index = 0;
 
     constructor(){
@@ -175,7 +175,7 @@ class Endboss extends MovableObject {
             this.playAnimation(this.IMAGES_DEAD);
             this.dead_images_index++;
             if(this.dead_images_index >= this.IMAGES_DEAD.length*3){
-                this.dead_animation_completed = true;
+                this.deadAnimationCompleted = true;
             }
         } else if(this.isHurt()){
             this.playSound(this.hurt_sound);

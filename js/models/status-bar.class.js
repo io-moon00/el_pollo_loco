@@ -70,6 +70,11 @@ class StatusBarCoin extends DrawableObject {
         this.height = 40;
     }
 
+    /**
+     * Draws the coin status bar icon and the collected coin count on the canvas.
+     * @param {CanvasRenderingContext2D} ctx - The rendering context of the canvas.
+     * @returns {void}
+     */
     draw(ctx) {
         super.draw(ctx);
         ctx.font = '32px zabars';
@@ -95,6 +100,11 @@ class StatusBarBottle extends DrawableObject {
         this.height = 40;
     }
 
+    /**
+     * Draws the bottle status bar icon and the collected bottle count on the canvas.
+     * @param {CanvasRenderingContext2D} ctx - The rendering context of the canvas.
+     * @returns {void}
+     */
     draw(ctx) {
         super.draw(ctx);
         ctx.font = '32px zabars';

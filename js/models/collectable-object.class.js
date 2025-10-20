@@ -1,16 +1,16 @@
 class CollectableObject extends DrawableObject {
     width = 50;
     height = 50;
-    is_collected = false;
+    isCollected = false;
     collect_sound = null; // Will be set by child classes
-    range_x = 4 * 719 - 200;
-    range_y = 300;
+    rangeX = 4 * 719 - 200;
+    rangeY = 300;
 
     constructor(imagePath, x = undefined, y = undefined) {
         super();
         this.loadImage(imagePath);
-        this.x = x !== undefined ? x : 200 + Math.floor(Math.random() * this.range_x);
-        this.y = y !== undefined ? y : 100 + Math.floor(Math.random() * this.range_y);
+        this.x = x !== undefined ? x : 200 + Math.floor(Math.random() * this.rangeX);
+        this.y = y !== undefined ? y : 100 + Math.floor(Math.random() * this.rangeY);
     }
 
     /**
@@ -19,8 +19,8 @@ class CollectableObject extends DrawableObject {
      * @returns {void}
      */
     collect() {
-        if (this.is_collected) return; // Prevent double collection
-        this.is_collected = true;
+        if (this.isCollected) return; // Prevent double collection
+        this.isCollected = true;
         this.playCollectionSound();
         this.removeFromWorld(50);
         this.stopSoundAfterDelay();
