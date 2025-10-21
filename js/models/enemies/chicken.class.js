@@ -15,7 +15,7 @@ class Chicken extends MovableObject{
     life = 5;
     range = 4 * 719 - 200;
     size = 'normal';
-    speed = 0.3 + Math.random() * 0.45;
+    speed = 0.4 + Math.random() * 0.15;
     y = 350;
     width = 80;
     height = 80;

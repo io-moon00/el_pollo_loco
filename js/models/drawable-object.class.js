@@ -88,10 +88,10 @@ class DrawableObject {
     getZones() {
         return [
             { start: 200, end: 719, weight: 0.15 },
-            { start: 719, end: 2*719, weight: 0.25 },   
-            { start: 2*719, end: 3*719, weight: 0.3 },
-            { start: 3*719, end: 4*719, weight: 0.3 },
-            { start: 4*719, end: this.range, weight: 0.1 }
+            { start: 720, end: 2*719, weight: 0.25 },   
+            { start: 2*719+1, end: 3*719, weight: 0.3 },
+            { start: 3*719+1, end: 4*719, weight: 0.3 },
+            { start: 4*719+1, end: this.range, weight: 0.1 }
         ];
     }
 

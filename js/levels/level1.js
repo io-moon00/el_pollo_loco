@@ -1,9 +1,9 @@
 let level1;
-let numberOfChickens = 15;
+let numberOfChickens = 10;
 let numberOfSmallChickens = 6;
 let numberOfBottlesOnGround = 9;
 let numberOfBottlesOnAir = 5;
-let numberOfCoins = 20;
+let numberOfCoins = 10;
 
 function initLevel() {
 
