@@ -45,7 +45,7 @@ class Endboss extends MovableObject {
     x = 5 * 719 - 300;
     width = 350;
     height = 350;
-    life = 40;
+    life = 50;
     speed = 1;
     firstContact = false;
     isAlert = false;

@@ -15,7 +15,7 @@ class Chicken extends MovableObject{
     life = 5;
     range = 4 * 719 - 200;
     size = 'normal';
-    speed = 0.15 + Math.random() * 0.25;
+    speed = 0.3 + Math.random() * 0.45;
     y = 350;
     width = 80;
     height = 80;
@@ -30,7 +30,7 @@ class Chicken extends MovableObject{
         this.deadImage = `img/3_enemies_chicken/chicken_${size}/2_dead/dead.png`;
         this.walkingImages = size === 'normal' ? this.IMAGES_WALKING_CHICKEN : this.IMAGES_WALKING_CHICK;
         if(size === 'small'){
-            this.speed = 0.1 + Math.random() * 0.2;
+            this.speed = 0.2 + Math.random() * 0.15;
             this.y = 380;
             this.width = 60;
             this.height = 50;

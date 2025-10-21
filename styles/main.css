@@ -1,6 +1,6 @@
 @font-face{
     font-family: 'zabars';
-    src: url('fonts/zabars.ttf') format('truetype');
+    src: url('../fonts/zabars.ttf') format('truetype');
 }
 
 body{
@@ -9,7 +9,7 @@ body{
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-image: url('img/start-screen.png');
+    background-image: url('../img/start-screen.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -153,165 +153,6 @@ canvas{
 
 .restart-btn:hover {
     background-color: #ff8533;
-}
-
-.help-screen{
-    max-width: 850px;
-    width: 95%;
-    padding: 24px;
-    background: #fff3e0;
-    border-radius: 18px;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
-    color: #3e2723;
-    max-height: 95vh;
-    overflow-y: auto;
-    box-sizing: border-box;
-    margin: auto;
-}
-
-.help-screen h1{
-    text-align:center;
-    color:#ea7827; 
-    font-size: 2em;
-    margin-bottom: 0.4em;
-    display: flex;
-    align-items: center;
-    text-shadow: none!important;
-}
-
-.help-screen h1 img{
-    margin-right: 15px;
-    width: 80px;
-}
-
-.help-screen h2{
-    color:#ea7827;
-    font-size: 1.5em;
-    margin-bottom: 0.5em;
-}
-
-.help-screen p{
-    font-size: 1.1em;
-    line-height: 1.6;
-    font-family: 'Trebuchet MS', 'Comic Sans MS', sans-serif;
-}
-
-.help-screen hr{
-    margin: 24px 0;
-    border: none;
-    border-top: 2px dashed #ea7827;
-}
-
-.help-screen ul{
-    list-style: none;
-    padding-left: 0;
-    font-size: 1.05em;
-    line-height: 1.6;
-    font-family: 'Trebuchet MS', 'Comic Sans MS', sans-serif;
-}
-
-.help-screen .back-btn-container{
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.help-screen .back-btn-container a{
-    text-decoration: none;
-    background-color: #ea7827;
-    color: white;
-    padding: 12px 24px;
-    border-radius: 5px;
-    font-size: 18px;
-    transition: background-color 0.3s ease;
-}
-
-.help-screen .back-btn-container a:hover{
-    background-color: #9f531c;
-}
-
-.help-screen a {
-    color: #ea7827;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.settings-instructions{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-width: 80%;
-    gap: 30px;
-    font-size: 24px;
-}
-
-.settings-screen{
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: space-between;
-    max-height: 400px;
-    gap: 5px;
-}
-
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
-}
-
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
-}
-
-input:checked + .slider {
-    background-color: #9f531c;
-}
-
-input:focus + .slider {
-    box-shadow: 0 0 1px #9f531c;
-}
-
-input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
-}
-
-.slider.round {
-    border-radius: 34px;
-}
-
-.slider.round:before {
-    border-radius: 50%;
 }
 
 .game-controls {

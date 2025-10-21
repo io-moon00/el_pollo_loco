@@ -56,7 +56,7 @@
     }
     #stop-game-btn,
     #restart-btn-mobile{
-        display: block;;
+        display: flex;
     }
     .game-menu{
         display: none;
