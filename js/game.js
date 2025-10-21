@@ -210,10 +210,9 @@ window.addEventListener("keyup", (e) => {
 document.addEventListener("DOMContentLoaded", () => {
     moveLeftBtn = document.getElementById('btnLeft');
     moveRightBtn = document.getElementById('btnRight');
-    jumpBtn = document.getElementById('btnJump');
+    jumpBtns = document.getElementsByClassName('jump');
     throwBtn = document.getElementById('btnThrow');
 
-    // Movement buttons
     moveLeftBtn.addEventListener('touchstart', (e) => {
         e.preventDefault();
         keyboard.LEFT = true;
@@ -224,19 +223,18 @@ document.addEventListener("DOMContentLoaded", () => {
         keyboard.RIGHT = true;
     }, { passive: false });
 
-    // Jump button
-    jumpBtn.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        keyboard.SPACE = true;
-    }, { passive: false });
+    Array.from(jumpBtns).forEach(jumpBtn => {
+        jumpBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            keyboard.SPACE = true;
+        }, { passive: false });
+    });
 
-    // Throw button
     throwBtn.addEventListener('touchstart', (e) => {
         e.preventDefault();
         keyboard.Q = true;
     }, { passive: false });
 
-    // Add touchend events to reset the keyboard state
     moveLeftBtn.addEventListener('touchend', (e) => {
         e.preventDefault();
         keyboard.LEFT = false;
@@ -247,17 +245,18 @@ document.addEventListener("DOMContentLoaded", () => {
         keyboard.RIGHT = false;
     }, { passive: false });
 
-    jumpBtn.addEventListener('touchend', (e) => {
-        e.preventDefault();
-        keyboard.SPACE = false;
-    }, { passive: false });
+    Array.from(jumpBtns).forEach(jumpBtn => {
+        jumpBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            keyboard.SPACE = false;
+        }, { passive: false });
+    });
 
     throwBtn.addEventListener('touchend', (e) => {
         e.preventDefault();
         keyboard.Q = false;
     }, { passive: false });
 
-    // Also handle touchcancel in case the touch is interrupted
     moveLeftBtn.addEventListener('touchcancel', (e) => {
         e.preventDefault();
         keyboard.LEFT = false;
@@ -268,10 +267,12 @@ document.addEventListener("DOMContentLoaded", () => {
         keyboard.RIGHT = false;
     }, { passive: false });
 
-    jumpBtn.addEventListener('touchcancel', (e) => {
-        e.preventDefault();
-        keyboard.SPACE = false;
-    }, { passive: false });
+    Array.from(jumpBtns).forEach(jumpBtn => {
+        jumpBtn.addEventListener('touchcancel', (e) => {
+            e.preventDefault();
+            keyboard.SPACE = false;
+        }, { passive: false });
+    });
 
     throwBtn.addEventListener('touchcancel', (e) => {
         e.preventDefault();

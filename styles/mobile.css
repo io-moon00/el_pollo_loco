@@ -87,3 +87,17 @@
         display: block;
     }
 }
+
+@media (hover: none) and (pointer: coarse) {
+    .mobile-game-controls {
+        display: flex;
+    }
+    
+    #stop-game-btn,
+    #restart-btn-mobile {
+        display: flex;
+    }
+}
+
+
+

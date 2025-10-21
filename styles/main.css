@@ -14,7 +14,7 @@ body{
     background-repeat: no-repeat;
     background-size: cover;
     font-family: 'cooper-black-std', Arial, Helvetica, sans-serif;
-    height: 100vh;
+    height: 100dvh;
     width: 100vw;
     box-sizing: border-box;
     position: relative;
@@ -45,7 +45,7 @@ canvas{
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    max-height: 100vh;
+    max-height: 100dvh;
     box-sizing: border-box;
     padding: 30px;
 }
@@ -222,12 +222,6 @@ canvas{
     transform: scale(0.95);
 }
 
-#btnRight { 
-    right: 20px;
-    position: absolute;
-    bottom: 20px;
-}
-
 .arrow {
     fill: white;
     width: 40px;;
@@ -237,6 +231,15 @@ canvas{
 .left-controls{
     position: absolute;
     left: 20px;
+    bottom: 20px;
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+}
+
+.right-controls{
+    position: absolute;
+    right: 20px;
     bottom: 20px;
     display: flex;
     gap: 20px;
