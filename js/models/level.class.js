@@ -24,6 +24,5 @@ class Level{
      */
     setLevelEndX(){
         this.levelEndX = (this.backgroundObjects.length / 4 - 2) * 719
-        console.log('Level end x set to: ' + this.levelEndX);
     }
 }

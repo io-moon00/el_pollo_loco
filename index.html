@@ -6,10 +6,11 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>El Pollo loco</title>
-        <link rel="stylesheet" href="/style.css">
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="mobile.css">
         <link rel="shortcut icon" href="img/3_enemies_chicken/chicken_normal/1_walk/1_w.png" type="image/x-icon">
         <link rel="stylesheet" href="https://use.typekit.net/wmt6kfx.css">
-        <script src="../js/settings.js"></script>
+        <script src="js/settings.js"></script>
         <script src="js/models/drawable-object.class.js"></script>
         <script src="js/models/movable-objects.class.js"></script>
         <script src="js/models/character.class.js"></script>
@@ -30,30 +31,77 @@
     </head>
 
     <body id="body" onload="setMuted()">
-        <div class="wrapper">
-            <h1 id="title" class="d-none">El Pollo loco</h1>
-
-            <div id="game" class="game d-none">
-                <div class="game-controls">
-                    <button id="mute-btn" class="mute-button">
-                        <span class="sound-on">🔊</span>
-                        <span class="sound-off d-none">🔇</span>
-                    </button>
-                </div>
-                <canvas id="canvas" width="720" height="480"></canvas>
-                <div class="game-menu">
-                    <div>
-                        <img class="stop-game-btn" onclick="resetGame()" src="img/stop-game-btn.png" alt="Stop Game" />
-                        <img id="restart-btn" class="stop-game-btn d-none" onclick="startGame()" src="img/restart-btn.png" alt="Restart Game" />
-                    </div>
-                    <img onclick="fullScreen()" class="full-screen-btn" src="img/fullScreen.png" alt="full Screen" />
-                </div>
-            </div>
+        <div class="start-screen">
+            <h1 id="title" class="start-title">El Pollo loco</h1>
             <img id="start-game-btn" onclick="startGame()" class="start-btn" src="img/start-btn.png" alt="Start Button">
-            
             <div id="menu" class="menu">
                 <a class="item" href="templates/help-screen.html"><img src="img/help-btn.png" alt="Help"></a>
                 <a class="item" href="templates/settings-screen.html"><img src="img/settings-btn.png" alt="Settings"></a>
+            </div>
+        </div>
+
+        <div id="game" class="game d-none">
+            <div class="game-controls">
+                <div id="restart-btn-mobile" onclick="startGame()" class="mute-button d-none">
+                    <span>↻</span>
+                </div>
+                <div id="stop-game-btn" onclick="resetGame()" class="mute-button">
+                    <svg class="stop-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/>
+                    </svg>
+                </div>
+
+                
+
+                <button id="mute-btn" class="mute-button">
+                    <span class="sound-on">🔊</span>
+                    <span class="sound-off d-none">🔇</span>
+                </button>
+            </div>
+    
+            <canvas id="canvas" width="720" height="480"></canvas>
+            <div class="game-menu">
+                <div>
+                    <img class="stop-game-btn" onclick="resetGame()" src="img/stop-game-btn.png" alt="Stop Game" />
+                    <img id="restart-btn" class="stop-game-btn d-none" onclick="startGame()" src="img/restart-btn.png" alt="Restart Game" />
+                </div>
+                <img onclick="fullScreen()" class="full-screen-btn" src="img/fullScreen.png" alt="full Screen" />
+            </div>
+        </div>
+
+        <div id="mobile-game-controls" class="mobile-game-controls d-none">
+            <div class="left-controls">
+                
+                <div id="btnThrow" class="mobile-btn">
+                    <img class="throw-icon" src="img/6_salsa_bottle/salsa_bottle.png" alt="Throw Bottle" />
+                </div>
+
+                <div id="btnJump" class="mobile-btn">
+                    <svg class="arrow" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" d="M5.575 13.729C4.501 15.033 5.43 17 7.12 17h9.762c1.69 0 2.618-1.967 1.544-3.271l-4.881-5.927a2 2 0 0 0-3.088 0l-4.88 5.927Z" clip-rule="evenodd"/>
+                    </svg>
+                </div>
+
+                <div id="btnLeft" class="mobile-btn">
+                    <svg class="arrow" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" d="M13.729 5.575c1.304-1.074 3.27-.146 3.27 1.544v9.762c0 1.69-1.966 2.618-3.27 1.544l-5.927-4.881a2 2 0 0 1 0-3.088l5.927-4.88Z" clip-rule="evenodd"/>
+                    </svg>
+                </div>
+            </div>
+            
+
+            <div id="btnRight" class="mobile-btn">
+                <svg class="arrow " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd" d="M10.271 5.575C8.967 4.501 7 5.43 7 7.12v9.762c0 1.69 1.967 2.618 3.271 1.544l5.927-4.881a2 2 0 0 0 0-3.088l-5.927-4.88Z" clip-rule="evenodd"/>
+                </svg>
+            </div>
+        </div>
+
+        <div id="orientation-message" class="d-none">
+            <div class="orientation-card">
+                <div class="phone"></div>
+                <h2>Please rotate your device</h2>
+                <p>For the best experience, play in <span id="orientation-mode">landscape</span> mode 🌶️</p>
             </div>
         </div>
     </body>

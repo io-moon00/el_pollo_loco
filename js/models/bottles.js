@@ -1,5 +1,5 @@
 class ThrowableBottle extends MovableObject{
-    splash_sound = new Audio('audio/splash_bottle.mp3');
+    splashSound = new Audio('audio/splash_bottle.mp3');
     throw_sound = new Audio('audio/throw_bottle.mp3');
     splash = false;
     splashed = false;
@@ -8,19 +8,19 @@ class ThrowableBottle extends MovableObject{
     width = 50
 
     SPLASH_IMAGES = [
-        '../img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png',
-        '../img/6_salsa_bottle/bottle_rotation/bottle_splash/2_bottle_splash.png',
-        '../img/6_salsa_bottle/bottle_rotation/bottle_splash/3_bottle_splash.png',
-        '../img/6_salsa_bottle/bottle_rotation/bottle_splash/4_bottle_splash.png',
-        '../img/6_salsa_bottle/bottle_rotation/bottle_splash/5_bottle_splash.png',
-        '../img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png'
+        'img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png',
+        'img/6_salsa_bottle/bottle_rotation/bottle_splash/2_bottle_splash.png',
+        'img/6_salsa_bottle/bottle_rotation/bottle_splash/3_bottle_splash.png',
+        'img/6_salsa_bottle/bottle_rotation/bottle_splash/4_bottle_splash.png',
+        'img/6_salsa_bottle/bottle_rotation/bottle_splash/5_bottle_splash.png',
+        'img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png'
     ];
 
     ROTATE_IMAGES = [
-        '../img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png',
-        '../img/6_salsa_bottle/bottle_rotation/2_bottle_rotation.png',
-        '../img/6_salsa_bottle/bottle_rotation/3_bottle_rotation.png',
-        '../img/6_salsa_bottle/bottle_rotation/4_bottle_rotation.png'
+        'img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png',
+        'img/6_salsa_bottle/bottle_rotation/2_bottle_rotation.png',
+        'img/6_salsa_bottle/bottle_rotation/3_bottle_rotation.png',
+        'img/6_salsa_bottle/bottle_rotation/4_bottle_rotation.png'
     ];
 
     constructor(x, y, otherDirection){
@@ -77,9 +77,9 @@ class ThrowableBottle extends MovableObject{
     startSplashing(){
         this.animationState = 'splashing';
         this.splashAnimationIndex = 0;
-        this.playSound(this.splash_sound);
+        this.playSound(this.splashSound);
         setTimeout(() => {
-            this.splash_sound.pause();
+            this.splashSound.pause();
         }, 300);
     }
 
@@ -112,6 +112,7 @@ class ThrowableBottle extends MovableObject{
      * @returns {void}
      */
     rotatingAnimation(){
+        this.splashSound.pause();
         if (this.isAboveGround()) {
             this.playAnimation(this.ROTATE_IMAGES);
         } else {
@@ -158,8 +159,5 @@ class CollectableBottle extends DrawableObject{
         this.isCollected = true;
         this.playSound(this.collectedSound);
         this.removeFromWorld(50);
-        setTimeout(() => {
-            this.collectedSound.pause();
-        }, 200);
     }
 }

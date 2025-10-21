@@ -9,17 +9,20 @@ class World{
     statusBarHealth = new StatusBarHealth();
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
+    statusBarEndboss = new StatusBarHealthEndboss();
     throwableBottles=[];
     qKeyPressed = false;
     gameWonMenuShown = false;
-    gameRunning = true; 
+    gameRunning = true;
+    dirtyRegions = [];
 
     constructor(canvas, keyboard){
+        this.gameRunning = true;
         this.ctx = canvas.getContext('2d');
         this.physics = new WorldPhysics(this);
         this.endScreen = new WorldEndScreen(this, canvas);
         this.canvas = canvas;
-        this.keyboard = keyboard;  
+        this.keyboard = keyboard;
         this.setWorld();
         this.draw();
         this.run();
@@ -57,7 +60,6 @@ class World{
      */
     gameLoop() {
         if (!this.gameRunning) return; 
-        console.log('Game loop tick');
         this.physics.checkCollisions();
         this.checkThrowObjects();
         this.update();
@@ -82,7 +84,6 @@ class World{
         this.drawBackgroundObjects();
         this.drawStatusBars();
         this.drawLevelObjects();
-        this.ctx.translate(-this.cameraX, 0);
     }
 
     /**
@@ -117,6 +118,9 @@ class World{
         this.addToMap(this.statusBarHealth);
         this.addToMap(this.statusBarCoin);
         this.addToMap(this.statusBarBottle);
+        if (this.level.endboss.firstContact) {
+            this.addToMap(this.statusBarEndboss);
+        }
     }
 
     /**

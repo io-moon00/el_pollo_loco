@@ -6,7 +6,7 @@ class Coin extends DrawableObject{
     isCollected = false;
 
     constructor(){
-        super().loadImage('../img/8_coin/coin_1.png');
+        super().loadImage('img/8_coin/coin_1.png');
         this.x = this.getWeightedRandomPosition();
         this.y = 100 + Math.floor(Math.random() * 300);
     }
@@ -21,8 +21,5 @@ class Coin extends DrawableObject{
         this.collectedSound.volume = 0.1;
         this.playSound(this.collectedSound);
         this.removeFromWorld(50);
-        setTimeout(() => {
-            this.collectedSound.pause();
-        }, 200);
     }
 }

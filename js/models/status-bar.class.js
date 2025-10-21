@@ -1,37 +1,6 @@
-class StatusBarHealth extends DrawableObject{
-
+class StatusBar extends DrawableObject{
     percentage;
-
-    IMAGES = [
-        '../img/7_statusbars/1_statusbar/2_statusbar_health/orange/0.png',
-        '../img/7_statusbars/1_statusbar/2_statusbar_health/orange/20.png',
-        '../img/7_statusbars/1_statusbar/2_statusbar_health/orange/40.png',
-        '../img/7_statusbars/1_statusbar/2_statusbar_health/orange/60.png',
-        '../img/7_statusbars/1_statusbar/2_statusbar_health/orange/80.png',
-        '../img/7_statusbars/1_statusbar/2_statusbar_health/orange/100.png'
-    ];
-
-    constructor(){
-        super();
-        super.loadImages(this.IMAGES)
-        this.x = 20;
-        this.y = 20;
-        this.width = 140;
-        this.height = 40;
-        this.setPercentage(100);
-    }
-
-    /**
-     * Sets the percentage value for the status bar and updates the image accordingly.
-     * @param {number} percentage - The new percentage value (e.g., for health).
-     * @returns {void}
-     */
-    setPercentage(percentage){
-        this.percentage = percentage;
-        let path = this.IMAGES[this.resolveImageIndex()];
-        this.img = this.imageCache[path];
-    }
-
+    maxHealth;
     /**
      * Resolves the index of the image to be displayed based on the current percentage.
      * @returns {number} The index of the image in the IMAGES array.
@@ -52,11 +21,83 @@ class StatusBarHealth extends DrawableObject{
         }
     }
 
+    /**
+     * Calculates the percentage of life and sets it to the percentage property.
+     * @param {number} life - The current life value.
+     * @returns {void}
+     */
+    calculatePercentage(life){
+        if (life > 0) {
+            this.percentage = (life/this.maxHealth)*100;
+        } else {
+            this.percentage = 0;
+        }
+    }
+
+
+    /**
+     * Sets the percentage of the status bar and updates the image.
+     * @param {number} life - The current life value to calculate the percentage from.
+     * @returns {void}
+     */
+    setPercentage(life){
+        this.calculatePercentage(life);
+        let path = this.IMAGES[this.resolveImageIndex()];
+        this.img = this.imageCache[path];
+    }
 }
+
+class StatusBarHealth extends StatusBar{
+    IMAGES = [
+        'img/7_statusbars/1_statusbar/2_statusbar_health/orange/0.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/orange/20.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/orange/40.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/orange/60.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/orange/80.png',
+        'img/7_statusbars/1_statusbar/2_statusbar_health/orange/100.png'
+    ];
+    constructor(){
+        super();
+        super.loadImages(this.IMAGES)
+        this.x = 20;
+        this.y = 20;
+        this.width = 140;
+        this.height = 40;
+        this.maxHealth = 100;
+        this.setPercentage(100);
+    }
+}
+
+
+
+class StatusBarHealthEndboss extends StatusBar{
+
+    IMAGES = [
+        'img/7_statusbars/2_statusbar_endboss/0.png',
+        'img/7_statusbars/2_statusbar_endboss/20.png',
+        'img/7_statusbars/2_statusbar_endboss/40.png',
+        'img/7_statusbars/2_statusbar_endboss/60.png',
+        'img/7_statusbars/2_statusbar_endboss/80.png',
+        'img/7_statusbars/2_statusbar_endboss/100.png'
+    ];
+
+    constructor(){
+        super();
+        super.loadImages(this.IMAGES)
+        this.x = 560;
+        this.y = 40;
+        this.width = 140;
+        this.height = 25;
+        this.maxHealth = 40;
+        this.setPercentage(40);
+    }
+}
+
+
 
 class StatusBarCoin extends DrawableObject {
     IMAGE_COIN = [
-        '../img/7_statusbars/3_icons/icon_coin.png'
+        'img/7_statusbars/3_icons/icon_coin.png'
     ];
 
     world;
@@ -86,7 +127,7 @@ class StatusBarCoin extends DrawableObject {
 
 class StatusBarBottle extends DrawableObject {
     IMAGE_COIN = [
-        '../img/7_statusbars/3_icons/icon_salsa_bottle.png'
+        'img/7_statusbars/3_icons/icon_salsa_bottle.png'
     ];
 
     world;

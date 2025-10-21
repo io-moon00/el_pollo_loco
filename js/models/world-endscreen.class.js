@@ -8,7 +8,6 @@ class WorldEndScreen {
     bottleImage = new Image();
     enemyImage = new Image();
 
-
     constructor(world) {
         this.world = world;
         this.gameOverImg.src = 'img/9_intro_outro_screens/game_over/game over.png';
@@ -20,7 +19,6 @@ class WorldEndScreen {
 
     /**
      * Calculates the center coordinates of the canvas and stores them as properties of the instance.
-     * This is used to position elements centrally on the game over or win screens.
      * @returns {void}
      */
     calcCanvasCenter() {
@@ -29,14 +27,21 @@ class WorldEndScreen {
     }
 
     /**
-     * Draws the game over screen on the canvas.
-     * This includes centering and scaling the game over image, playing the game over sound,
-     * and making the restart button visible.
+     * Manages the visibility of HTML elements for the game over screen.
      * @returns {void}
      */
-    drawGameOverScreen(){
+    handleGameOverScreenHTMLVisibility(){
+        document.getElementById('restart-btn').classList.remove('d-none');
+        document.getElementById('restart-btn-mobile').classList.remove('d-none');
+        document.getElementById('mobile-game-controls').classList.add('d-none');
+    }
+
+    /**
+     * Draws the 'Game Over' image on the canvas.
+     * @returns {void}
+     */
+    drawGameOverImage(){
         this.calcCanvasCenter();
-        this.playGameOverSound();
         const scaledWidth = this.gameOverImg.width * 0.5;
         const scaledHeight = this.gameOverImg.height * 0.5;
         this.world.ctx.drawImage(
@@ -46,12 +51,20 @@ class WorldEndScreen {
             scaledWidth,
             scaledHeight
         );
-        document.getElementById('restart-btn').classList.remove('d-none');
+    }
+
+    /**
+     * Orchestrates the drawing of the 'Game Over' screen.
+     * @returns {void}
+     */
+    drawGameOverScreen(){
+        this.playGameOverSound();
+        this.drawGameOverImage();
+        this.handleGameOverScreenHTMLVisibility();
     }
 
     /**
      * Plays the game over sound effect if sound is enabled and the sound has not already been played.
-     * This prevents the sound from playing multiple times.
      * @returns {void}
      */
     playGameOverSound(){
@@ -84,16 +97,16 @@ class WorldEndScreen {
      * @returns {void}
      */
     draw(){
-        const scale = this._scale(this.world.canvas.width);
+        const scaledWidth = Math.max(0.7, Math.min(1.2, this.world.canvas.width / 1280));
         this.drawBackground();
         this.drawConfettiAnimation();
-        this.drawTitle(scale);
-        this.drawStats(scale);
+        this.drawTitle(scaledWidth);
+        this.drawStats(scaledWidth);
     }
 
     /**
      * Orchestrates the drawing of the 'You Won' screen.
-     * This function centers the canvas, plays the win sound, resets the canvas transform to ensure
+     * This function plays the win sound, resets the canvas transform to ensure
      * proper positioning, draws all the win screen elements (background, confetti, title, stats),
      * and makes the restart button visible. It also sets a timeout to stop the game loop,
      * effectively ending the game session after a short delay.
@@ -106,10 +119,25 @@ class WorldEndScreen {
         this.world.ctx.setTransform(1,0,0,1,0,0);
         this.draw();
         this.world.ctx.restore();
-        document.getElementById('restart-btn').classList.remove('d-none');
-        setTimeout(() => {
-            this.world.gameRunning = false;
-        }, 5000);
+        this.waitForConfettiCompletion();
+    }
+
+    /**
+     * Waits for all confetti particles to complete their animation before ending the game.
+     * This function periodically checks if all confetti has landed and then stops the game
+     * and shows the restart button.
+     * @returns {void}
+     */
+    waitForConfettiCompletion() {
+        const checkInterval = setInterval(() => {
+            if (this.confettiFinished || this.allConfettiLanded()) {
+                clearInterval(checkInterval);
+                this.world.gameRunning = false;
+                document.getElementById('restart-btn').classList.remove('d-none');
+                document.getElementById('restart-btn-mobile').classList.remove('d-none');
+                document.getElementById('mobile-game-controls').classList.add('d-none');
+            }
+        }, 100);
     }
 
     /**
@@ -118,7 +146,7 @@ class WorldEndScreen {
      * @returns {void}
      */
     drawBackground() {
-        this.world.ctx.fillStyle = 'rgba(9, 76, 0, 0.84)';
+        this.world.ctx.fillStyle = 'rgba(96, 180, 47, 0.84)';
         this.world.ctx.fillRect(0, 0, this.world.canvas.width, this.world.canvas.height);
     }
 
@@ -145,8 +173,6 @@ class WorldEndScreen {
         this.world.ctx.fillText('YOU WON!', this.canvasCenterX, y);
         this.world.ctx.restore();
     }
-
-    _scale = W => Math.max(0.7, Math.min(1.2, W / 1280));
 
     /**
      * Retrieves and calculates statistics about the collected coins.
@@ -201,8 +227,6 @@ class WorldEndScreen {
 
     /**
      * Draws the enemy kill statistics line on the 'You Won' screen.
-     * This function renders a line of text showing the number and percentage of killed enemies,
-     * preceded by an enemy icon. The position and size of the elements are adjusted based on the provided scale.
      * @param {number} scale - A dynamic scaling factor to adjust the size of the text and icon.
      * @param {number} y - The base vertical (y-coordinate) position on the canvas from which the stat line's position will be calculated.
      * @param {number} killedEnemies - The number of enemies killed by the player.
@@ -223,8 +247,6 @@ class WorldEndScreen {
 
     /**
      * Draws a bonus message on the 'You Won' screen based on the percentage of coins collected.
-     * Different messages are displayed for collecting 100%, 80%+, or 50%+ of the coins.
-     * No message is shown if the collection rate is below 50%.
      * @param {number} scale - A dynamic scaling factor to adjust the size and position of the text.
      * @param {number} y - The base vertical (y-coordinate) position on the canvas from which the message's position will be calculated.
      * @param {number} collectedCoinsPercentage - The percentage of coins collected, used to determine which bonus message to display.
@@ -233,7 +255,7 @@ class WorldEndScreen {
     drawBonusMessage(scale, y, collectedCoinsPercentage) {
         let bonus = collectedCoinsPercentage===100?'Perfect Collection! 🏆': collectedCoinsPercentage>=80?'Great Job! 🌟': collectedCoinsPercentage>=50?'Well Done! ⭐':'';
         if (bonus) { 
-            this.world.ctx.font=`800 ${Math.round(24*scale)}px Trebuchet MS, Arial, sans-serif`; 
+            this.world.ctx.font=`800 ${Math.round(36*scale)}px cooper-black-std, Arial, sans-serif`; 
             this.world.ctx.fillStyle='#C8E6C9';
             this.world.ctx.strokeText(bonus, this.canvasCenterX, y + 80 * scale); // Changed from y+40*scale to y+80*scale
             this.world.ctx.fillText(bonus, this.canvasCenterX, y + 80 * scale);   // Changed from y+40*scale to y+80*scale
@@ -242,23 +264,18 @@ class WorldEndScreen {
 
     /**
      * Sets the text rendering parameters for the canvas context.
-     * This function configures the alignment, baseline, font, and fill style for drawing text,
-     * ensuring a consistent appearance for the statistics on the 'You Won' screen.
      * @param {number} scale - A dynamic scaling factor based on the canvas width, used to adjust the font size.
      * @returns {void}
      */
     setTextParameters(scale) {
         this.world.ctx.textAlign = 'center';
         this.world.ctx.textBaseline = 'middle';
-        this.world.ctx.font = `400 ${Math.round(28 * scale)}px cooper-black-std, Arial, sans-serif`;
+        this.world.ctx.font = `400 ${Math.round(36 * scale)}px cooper-black-std, Arial, sans-serif`;
         this.world.ctx.fillStyle = '#e5e5e5ff';
     }
 
     /**
      * Orchestrates the drawing of all game statistics on the 'You Won' screen.
-     * This function gathers data for collected coins and killed enemies, sets up the text rendering style,
-     * and then calls separate methods to draw each line of statistics and any applicable bonus messages.
-     * The positions and sizes of the drawn elements are adjusted based on the provided scale factor.
      * @param {number} scale - A dynamic scaling factor based on the canvas width, used to adjust the size and position of the statistics to ensure they are well-proportioned on different screen sizes.
      * @returns {void}
      */
@@ -276,10 +293,6 @@ class WorldEndScreen {
 
     /**
      * Ensures that the confetti particles are initialized for the win screen animation.
-     * This function checks if the confetti array already exists or if the animation has finished.
-     * If not, it creates and populates an array with new confetti particle objects,
-     * each with random initial properties for position, velocity, and rotation.
-     * This setup is done only once per win screen display.
      * @returns {void}
      */
     confettiEnsure() {
@@ -301,8 +314,6 @@ class WorldEndScreen {
 
     /**
      * Checks if all confetti particles have completed their animation and landed.
-     * This function iterates through the `winConfetti` array and verifies the `hasLanded` status of each particle.
-     * It is used to determine when the confetti animation can be stopped.
      * @returns {boolean} - Returns `true` if every particle in the `winConfetti` array has landed, otherwise returns `false`.
      */
     allConfettiLanded() {
@@ -311,7 +322,6 @@ class WorldEndScreen {
 
     /**
      * Updates the position and rotation of a single confetti particle for one animation frame.
-     * If the particle moves beyond the bottom of the canvas, it is marked as 'landed' to stop its animation.
      * @param {object} particle - The confetti particle object to update. It contains properties for position (x, y), speed (speedX, speedY), rotation, and state (hasLanded).
      * @returns {void}
      */
@@ -326,13 +336,8 @@ class WorldEndScreen {
         }
     }
 
-
     /**
      * Manages a single frame of the confetti animation on the 'You Won' screen.
-     * This function iterates through all active confetti particles, updating their positions and rotations
-     * by calling `updateParticle()`. It then checks if all particles have landed using `allConfettiLanded()`.
-     * If they have, it cleans up the confetti array and marks the animation as finished to prevent further processing.
-     * Finally, it calls `confettiDraw()` to render the current state of the particles on the canvas.
      * @returns {void}
      */
     confettiAnimation() {
@@ -349,8 +354,6 @@ class WorldEndScreen {
 
     /**
      * Plays the win sound effect if sound is enabled and the sound has not already been played.
-     * This function sets the volume, ensures the sound does not loop, and then plays it.
-     * It also sets a flag to prevent the sound from playing multiple times.
      * @returns {void}
      */
     playWinSound(){
@@ -364,9 +367,6 @@ class WorldEndScreen {
 
     /**
      * Draws all active confetti particles on the canvas for the 'You Won' screen.
-     * This function iterates through the `winConfetti` array, and for each particle that has not yet landed,
-     * it applies transformations (translation, rotation, scale) and draws the chili image to represent the confetti.
-     * It ensures the image is loaded before attempting to draw it.
      * @returns {void}
      */
     confettiDraw() {    

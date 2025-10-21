@@ -80,23 +80,37 @@ class DrawableObject {
         }, timeout);
     }
 
+    /**
+     * Defines and returns an array of zones for object placement, each with a specific start, end, and weight.
+     * The weights influence the probability of an object spawning within that zone.
+     * @returns {Array<Object>} An array of zone objects, where each object has `start`, `end`, and `weight` properties.
+     */
+    getZones() {
+        return [
+            { start: 200, end: 719, weight: 0.1 },
+            { start: 719, end: 2*719, weight: 0.25 },   
+            { start: 2*719, end: 3*719, weight: 0.35 },
+            { start: 3*719, end: 4*719, weight: 0.3 },
+        ];
+    }
+
+    /**
+     * Calculates and returns a random position based on a weighted distribution across predefined zones.
+     * This method uses the zones defined in `getZones()` to determine a spawn position.
+     * Zones with higher weights are more likely to be chosen.
+     * @returns {number} A randomly generated position within one of the weighted zones.
+     */
     getWeightedRandomPosition() {
-    const zones = [
-        { start: 300, end: 719, weight: 0.15 },      // Early game - lower density
-        { start: 719, end: 2*719, weight: 0.35 },   // Mid game - higher density
-        { start: 2*719, end: 3*719, weight: 0.35 }, // Late game - higher density
-        { start: 3*719, end: 4*719-200, weight: 0.15 } // End game - some objects near finish
-    ];
-    
-    const random = Math.random();
-    let cumulativeWeight = 0;
-    
-    for (let zone of zones) {
-        cumulativeWeight += zone.weight;
-        if (random <= cumulativeWeight) {
-            return zone.start + Math.random() * (zone.end - zone.start);
+        const zones = this.getZones();
+        const totalWeight = zones.reduce((sum, zone) => sum + zone.weight, 0);
+        const random = Math.random() * totalWeight;
+        let cumulativeWeight = 0;
+        for (let zone of zones) {
+            cumulativeWeight += zone.weight;
+            if (random <= cumulativeWeight) {
+                const position = zone.start + Math.random() * (zone.end - zone.start);
+                return position;
+            }
         }
     }
-    return 300 + Math.random() * (this.range - 100);
-}
 }

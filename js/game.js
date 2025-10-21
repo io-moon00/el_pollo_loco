@@ -12,7 +12,8 @@ let background_sound = new Audio('audio/background.mp3');
  * @returns {void}
  */
 function startGame(){
-    console.log('Game started');
+    document.getElementById('title').classList.add('game-title');
+    document.getElementById('mobile-game-controls').classList.remove('d-none');
     document.getElementById('restart-btn').classList.add('d-none');
     intervalIds = [];
     initLevel();
@@ -60,8 +61,10 @@ function setStoppableInterval(fn, time) {
  * @returns {void}
  */
 function showStartscreen(){
+    document.getElementById('title').classList.remove('game-title');
+    document.getElementById('mobile-game-controls').classList.add('d-none');
     document.getElementById('game').classList.add('d-none');
-    document.getElementById('title').classList.add('d-none');
+    document.getElementById('title').classList.remove('d-none');
     document.getElementById('body').style.backgroundImage = "url('img/start-screen.png')";
     document.getElementById('menu').classList.remove('d-none');
     document.getElementById('start-game-btn').classList.remove('d-none');
@@ -189,7 +192,6 @@ window.addEventListener("keydown", (e) => {
 });
 
 window.addEventListener("keyup", (e) => {
-
     switch (e.code) {
         case 'ArrowUp':
             keyboard.UP = false;
@@ -229,3 +231,108 @@ window.addEventListener("keyup", (e) => {
         
     }   
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    moveLeftBtn = document.getElementById('btnLeft');
+    moveRightBtn = document.getElementById('btnRight');
+    jumpBtn = document.getElementById('btnJump');
+    throwBtn = document.getElementById('btnThrow');
+
+    // Movement buttons
+    moveLeftBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keyboard.LEFT = true;
+    }, { passive: false });
+
+    moveRightBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keyboard.RIGHT = true;
+    }, { passive: false });
+
+    // Jump button
+    jumpBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keyboard.SPACE = true;
+    }, { passive: false });
+
+    // Throw button
+    throwBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keyboard.Q = true;
+    }, { passive: false });
+
+    // Add touchend events to reset the keyboard state
+    moveLeftBtn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keyboard.LEFT = false;
+    }, { passive: false });
+
+    moveRightBtn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keyboard.RIGHT = false;
+    }, { passive: false });
+
+    jumpBtn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keyboard.SPACE = false;
+    }, { passive: false });
+
+    throwBtn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keyboard.Q = false;
+    }, { passive: false });
+
+    // Also handle touchcancel in case the touch is interrupted
+    moveLeftBtn.addEventListener('touchcancel', (e) => {
+        e.preventDefault();
+        keyboard.LEFT = false;
+    }, { passive: false });
+
+    moveRightBtn.addEventListener('touchcancel', (e) => {
+        e.preventDefault();
+        keyboard.RIGHT = false;
+    }, { passive: false });
+
+    jumpBtn.addEventListener('touchcancel', (e) => {
+        e.preventDefault();
+        keyboard.SPACE = false;
+    }, { passive: false });
+
+    throwBtn.addEventListener('touchcancel', (e) => {
+        e.preventDefault();
+        keyboard.Q = false;
+    }, { passive: false });
+});
+
+
+function isLandscapeMode() {
+    return window.innerWidth > window.innerHeight;
+}
+
+function handleOrientation(){
+    if (isLandscapeMode()) {
+        document.getElementById('orientation-message').classList.add('d-none');
+    } else {
+        document.getElementById('orientation-message').classList.remove('d-none');
+    }
+}
+
+window.addEventListener("load", () => {
+    setTimeout(() => {
+        handleOrientation();
+    }, 50);
+});
+
+document.addEventListener("resize", () => {
+    setTimeout(() => {
+        handleOrientation();
+    }, 200);
+});
+
+
+window.addEventListener("orientationchange", () => {
+    setTimeout(() => {
+        handleOrientation();
+    }, 50);
+});
+

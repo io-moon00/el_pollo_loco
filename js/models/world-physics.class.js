@@ -1,4 +1,5 @@
 class WorldPhysics {
+    
     constructor(world) {
         this.world = world;
     }
@@ -107,7 +108,7 @@ class WorldPhysics {
      * @returns {void}
      */
     checkCollisionsBottleEnemy() {
-    if (this.world.throwableBottles.length === 0) return;
+        if (this.world.throwableBottles.length === 0) return;
         this.world.level.enemies.forEach((enemy) => {
             for (let i = 0; i < this.world.throwableBottles.length; i++) {
                 const bottle = this.world.throwableBottles[i];
@@ -135,6 +136,7 @@ class WorldPhysics {
             if (this.world.level.endboss.isColliding(bottle) && !this.world.level.endboss.isHurt()) {
                 bottle.startSplashing();
                 this.world.level.endboss.hit();
+                this.world.statusBarEndboss.setPercentage(this.world.level.endboss.life);
                 break;
             }
         }
