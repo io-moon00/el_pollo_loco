@@ -402,6 +402,10 @@ input:checked + .slider:before {
     flex-direction: column;
 }
 
+#stop-game-btn,
+#restart-btn-mobile{
+    display: none;
+}
 
 #orientation-message[hidden] { display: none !important; }
 #orientation-message {
@@ -483,7 +487,3 @@ to   { transform: scale(1); opacity: 1; }
 		transform: rotate(-90deg)
 	}
 }
-
-
-
- 

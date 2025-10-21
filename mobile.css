@@ -54,6 +54,10 @@
     .mobile-game-controls{
         display: block;
     }
+    #stop-game-btn,
+    #restart-btn-mobile{
+        display: block;;
+    }
     .game-menu{
         display: none;
     }

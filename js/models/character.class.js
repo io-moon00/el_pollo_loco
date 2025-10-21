@@ -70,9 +70,13 @@ class Character extends MovableObject{
     collectedCoins = 0;
     lastMove;
     world;
+
     hurtSound = new Audio('audio/hurt.mp3');
     walkingSound = new Audio('audio/running.mp3');
     snoreSound = new Audio('audio/snore_sound.mp3');
+    startSlowdownThreshold = 850;
+    currentDirection = "right";
+    previousDirection = "right";
 
     constructor(){
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
@@ -91,7 +95,10 @@ class Character extends MovableObject{
             right: 40,
             bottom: 10
         };
-
+        
+        this.targetCameraOffset = 100;
+        this.currentCameraOffset = 100;
+        this.cameraTransitionSpeed = 2;
     }
 
     /**
@@ -121,10 +128,9 @@ class Character extends MovableObject{
      * @returns {boolean} - True if the character should move right, false otherwise.
      */
     shouldMoveRight(){
-    // Allow movement until the character reaches the right edge of the visible screen
-    let rightEdge = this.world.level.levelEndX + 600; // 600 is typical canvas width
-    return (this.world.keyboard.RIGHT || this.world.keyboard.D) && this.x < rightEdge - this.width;
-}
+        let rightEdge = this.world.level.levelEndX;
+        return (this.world.keyboard.RIGHT || this.world.keyboard.D) && this.x < rightEdge - this.width;
+    }
 
     /**
      * Checks if the character should move to the left.
@@ -155,6 +161,7 @@ class Character extends MovableObject{
         this.walkingSound.volume = 1;
         this.playSound(this.walkingSound);
         this.setLastMove();
+        this.currentDirection = 'right';
     }
 
     /**
@@ -168,7 +175,64 @@ class Character extends MovableObject{
         this.walkingSound.volume = 1;
         this.playSound(this.walkingSound);
         this.setLastMove();
+        this.currentDirection = 'left';
     }
+
+    /**
+     * Manages the character's speed and camera movement as they approach the end of the level.
+     * @returns {void}
+     */
+    levelEndSpeedControl(){
+        let distance_to_end = this.world.level.levelEndX - (this.x + this.width - 3);
+        let cameraSpeed = (1 - (distance_to_end / (this.startSlowdownThreshold - this.width))) * 400;
+        this.slowDownCharacter(distance_to_end);
+        this.updateCameraOffset(0.009);
+        this.world.cameraX = Math.round(-this.x + this.currentCameraOffset + cameraSpeed);
+    }
+
+    /**
+     * Gradually reduces the character's speed as they approach the end of the level.
+     * The speed is calculated based on the remaining distance, ensuring a smooth slowdown.
+     * @param {number} distance_to_end - The remaining distance to the end of the level.
+     * @returns {void}
+     */
+    slowDownCharacter(distance_to_end){ 
+        let factor = distance_to_end / (this.startSlowdownThreshold - this.width);
+        let speedMultiplier = 0.75 + (factor * 0.25);
+        this.speed = 4 * speedMultiplier;
+        this.speed = Math.max(3, Math.min(4, this.speed));
+    }
+
+    /**
+     * Smoothly updates the camera's horizontal offset based on the character's direction.
+
+     * @param {number} [speedFactor=0.02] - The speed at which the camera transitions to the new offset. A higher value results in a faster transition.
+     * @returns {void}
+     */
+    updateCameraOffset(speedFactor = 0.02) {
+        if (this.currentDirection === 'left') {
+            this.targetCameraOffset = this.world.canvas.width - 250;
+        } else if (this.currentDirection === 'right') {
+            this.targetCameraOffset = 100;
+        }
+        let offsetDifference = this.targetCameraOffset - this.currentCameraOffset;
+        if (Math.abs(offsetDifference) > 1) {
+            this.currentCameraOffset += offsetDifference * speedFactor;
+        } else {
+            this.currentCameraOffset = this.targetCameraOffset;
+        }
+    }
+
+    /**
+     * Controls the camera's horizontal position by updating its offset and recalculating its position relative to the character.
+     * This creates a smooth transition when the character changes direction.
+     * @returns {void}
+     */
+    directionChangSpeedControl() {
+        this.updateCameraOffset();
+        this.world.cameraX = Math.round(-this.x + this.currentCameraOffset);
+    }
+
 
     /**
      * Updates the camera's horizontal position to follow the character.
@@ -177,10 +241,24 @@ class Character extends MovableObject{
      * @returns {void}
      */
     updateCameraPosition(){
-        if (this.x < this.world.level.levelEndX) {
-            this.world.cameraX = -this.x + 100;
+        this.updateDirectionChanged();
+        if (this.x < this.world.level.levelEndX - this.startSlowdownThreshold) {
+            this.directionChangSpeedControl();
         } else {
-            this.speed = 2;
+            this.levelEndSpeedControl();
+        }
+    }
+
+     /**
+     * Updates the character's previous direction to match the current direction.
+     * @returns {void}
+     */
+    updateDirectionChanged() {
+        if (this.currentDirection === this.previousDirection) {
+            return false;
+        } else { 
+            this.previousDirection = this.currentDirection;
+            return true;
         }
     }
 

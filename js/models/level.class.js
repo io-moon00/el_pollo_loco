@@ -21,8 +21,9 @@ class Level{
      * Calculates and sets the x-coordinate for the end of the level.
      * The calculation is based on the total number of background objects.
      * The value 719 corresponds to the width of a background object.
+     * @returns {void}
      */
     setLevelEndX(){
-        this.levelEndX = (this.backgroundObjects.length / 4 - 2) * 719
+        this.levelEndX = (this.backgroundObjects.length / 4 - 1) * 719 - 100;
     }
 }

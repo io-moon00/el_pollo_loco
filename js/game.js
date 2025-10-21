@@ -27,11 +27,23 @@ function startGame(){
 };
 
 /**
- * Stops the game by pausing the background music and clearing all game-related intervals.
+ * Pauses all currently playing sounds in the game.
+ * This includes the background music, character snoring, hurt, and walking sounds.
+ * @returns {void}
+ */
+function stopAllSounds(){
+    background_sound.pause();
+    world.character.snoreSound.pause();
+    world.character.hurtSound.pause();
+    world.character.walkingSound.pause();
+}
+
+/**
+ * Stops the game by pausing all sounds and clearing all game-related intervals.
  * @returns {void}
  */
 function stopGame(){ 
-    background_sound.pause();
+    stopAllSounds();
     intervalIds.forEach(clearInterval);
 }
 
@@ -89,16 +101,6 @@ function showGameScreen(){
     document.getElementById('start-game-btn').classList.add('d-none');
 }
 
-/**
- * Toggles fullscreen mode for the game canvas.
- * This function retrieves the canvas element and calls the `enterFullscreen`
- * function to switch the display to fullscreen.
- * @returns {void}
- */
-function fullScreen() {
-    let element = document.getElementById("canvas");
-    enterFullscreen(element);
-}
 
 /**
  * Configures and plays the background music for the game.
@@ -117,44 +119,6 @@ function playMusic() {
         }
     }, 500);
 }
-
-/**
- * Requests to display a given HTML element in fullscreen mode, handling browser-specific implementations.
- * This function checks for the standard `requestFullscreen` method and falls back to vendor-prefixed
- * versions for compatibility with different browsers like Firefox, Chrome, Safari, Opera, and IE/Edge.
- * @param {HTMLElement} element - The HTML element to be displayed in fullscreen.
- * @returns {void}
- */
-function enterFullscreen(element) {
-    if (element.requestFullscreen) {
-        element.requestFullscreen();
-    } else if (element.mozRequestFullScreen) { // Firefox
-        element.mozRequestFullScreen();
-    } else if (element.webkitRequestFullscreen) { // Chrome, Safari and Opera
-        element.webkitRequestFullscreen();
-    } else if (element.msRequestFullscreen) { // IE/Edge
-        element.msRequestFullscreen();
-    }
-}
-
-/**
- * Exits fullscreen mode for the document.
- * This function checks for and calls the appropriate method to exit fullscreen
- * based on the browser being used (standard, Firefox, Chrome/Safari/Opera, IE/Edge).
- * @returns {void}
- */
-function exitFullscreen() {
-    if (document.exitFullscreen) {
-        document.exitFullscreen();
-    } else if (document.mozCancelFullScreen) { // Firefox
-        document.mozCancelFullScreen();
-    } else if (document.webkitExitFullscreen) { // Chrome, Safari and Opera
-        document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) { // IE/Edge
-        document.msExitFullscreen();
-    }
-}
-
 
 window.addEventListener("keydown", (e) => {
     switch (e.code) {
@@ -236,6 +200,13 @@ window.addEventListener("keyup", (e) => {
     }   
 });
 
+/**
+ * Initializes mobile touch controls after the DOM is fully loaded.
+ * This function sets up event listeners for touch interactions on the
+ * on-screen buttons for moving left, moving right, jumping, and throwing.
+ * It maps these touch events to the corresponding keyboard state properties.
+ * @returns {void}
+ */
 document.addEventListener("DOMContentLoaded", () => {
     moveLeftBtn = document.getElementById('btnLeft');
     moveRightBtn = document.getElementById('btnRight');
@@ -309,10 +280,21 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+/**
+ * Checks if the device is in landscape mode.
+ * This is determined by comparing the window's inner width and inner height.
+ * @returns {boolean} - Returns `true` if the window's width is greater than its height, indicating landscape mode; otherwise, returns `false`.
+ */
 function isLandscapeMode() {
     return window.innerWidth > window.innerHeight;
 }
 
+/**
+ * Handles the display of the orientation message based on the device's screen orientation.
+ * If the device is in landscape mode, the orientation message is hidden.
+ * If the device is in portrait mode, the orientation message is shown to prompt the user to rotate their device.
+ * @returns {void}
+ */
 function handleOrientation(){
     if (isLandscapeMode()) {
         document.getElementById('orientation-message').classList.add('d-none');
