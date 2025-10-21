@@ -32,6 +32,13 @@ canvas{
     width: auto;
 }
 
+button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
 .start-screen{
     display: flex;
     flex-direction: column;

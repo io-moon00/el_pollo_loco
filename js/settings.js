@@ -138,3 +138,42 @@ function setMuted() {
         soundOffIcon.classList.add('d-none');
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    let images = document.getElementsByTagName('img');
+    let buttons = document.getElementsByTagName('button');
+    let links = document.getElementsByTagName('a');
+
+    /**
+     * Prevents the context menu from appearing on right-click or long-press
+     * for the specified HTML element. It also disables text selection on touch devices.
+     * @param {HTMLElement} element - The HTML element to apply the prevention to.
+     * @returns {void}
+    */
+    function preventContextMenu(element) {
+        element.oncontextmenu = function () {
+            return false;
+        }
+        element.addEventListener('touchstart', function(e) {
+            element.style.webkitTouchCallout = 'none';
+            element.style.webkitUserSelect = 'none';
+            element.style.userSelect = 'none';
+        });
+        element.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+            return false;
+        });
+    }
+
+    for (let i = 0; i < images.length; i++) {
+        preventContextMenu(images[i]);
+    }
+    
+    for (let i = 0; i < buttons.length; i++) {
+        preventContextMenu(buttons[i]);
+    }
+
+    for (let i = 0; i < links.length; i++) {
+        preventContextMenu(links[i]);
+    }
+});
