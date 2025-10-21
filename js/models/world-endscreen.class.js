@@ -31,8 +31,10 @@ class WorldEndScreen {
      * @returns {void}
      */
     handleGameOverScreenHTMLVisibility(){
-        document.getElementById('restart-btn').classList.remove('d-none');
-        document.getElementById('restart-btn-mobile').classList.remove('d-none');
+        elements = document.getElementsByClassName('hide-on-start');
+        for (let btn of elements) {
+            btn.classList.remove('d-none');
+        }
         document.getElementById('mobile-game-controls').classList.add('d-none');
     }
 
@@ -76,9 +78,6 @@ class WorldEndScreen {
 
     /**
      * Manages the confetti animation on the 'You Won' screen.
-     * This function ensures that confetti particles are initialized via `confettiEnsure()`
-     * and then triggers the animation for each frame by calling `confettiAnimation()`,
-     * provided the animation has not already been marked as finished.
      * @returns {void}
      */
     drawConfettiAnimation(){
@@ -92,8 +91,6 @@ class WorldEndScreen {
 
     /**
      * Orchestrates the drawing of the entire 'You Won' screen Elements.
-     * This function calculates a dynamic scale factor and then calls other drawing methods
-     * to render the background, confetti animation, title, and game statistics.
      * @returns {void}
      */
     draw(){
@@ -106,10 +103,6 @@ class WorldEndScreen {
 
     /**
      * Orchestrates the drawing of the 'You Won' screen.
-     * This function plays the win sound, resets the canvas transform to ensure
-     * proper positioning, draws all the win screen elements (background, confetti, title, stats),
-     * and makes the restart button visible. It also sets a timeout to stop the game loop,
-     * effectively ending the game session after a short delay.
      * @returns {void}
      */
     drawYouWinScreen(){
@@ -124,8 +117,6 @@ class WorldEndScreen {
 
     /**
      * Waits for all confetti particles to complete their animation before ending the game.
-     * This function periodically checks if all confetti has landed and then stops the game
-     * and shows the restart button.
      * @returns {void}
      */
     waitForConfettiCompletion() {
@@ -133,9 +124,7 @@ class WorldEndScreen {
             if (this.confettiFinished || this.allConfettiLanded()) {
                 clearInterval(checkInterval);
                 this.world.gameRunning = false;
-                document.getElementById('restart-btn').classList.remove('d-none');
-                document.getElementById('restart-btn-mobile').classList.remove('d-none');
-                document.getElementById('mobile-game-controls').classList.add('d-none');
+                this.handleGameOverScreenHTMLVisibility();
             }
         }, 100);
     }

@@ -13,8 +13,11 @@ let background_sound = new Audio('audio/background.mp3');
  */
 function startGame(){
     document.getElementById('title').classList.add('game-title');
+    elements = document.getElementsByClassName('hide-on-start');
+    for (let btn of elements) {
+        btn.classList.add('d-none');
+    }
     document.getElementById('mobile-game-controls').classList.remove('d-none');
-    document.getElementById('restart-btn').classList.add('d-none');
     intervalIds = [];
     initLevel();
     showGameScreen();
@@ -69,6 +72,7 @@ function showStartscreen(){
     document.getElementById('menu').classList.remove('d-none');
     document.getElementById('start-game-btn').classList.remove('d-none');
     document.getElementById('restart-btn').classList.add('d-none');
+    elements = document.getElementsByClassName('hide-on-start');
 }
 
 /**

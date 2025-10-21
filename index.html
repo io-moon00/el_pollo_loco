@@ -37,12 +37,13 @@
             <div id="menu" class="menu">
                 <a class="item" href="templates/help-screen.html"><img src="img/help-btn.png" alt="Help"></a>
                 <a class="item" href="templates/settings-screen.html"><img src="img/settings-btn.png" alt="Settings"></a>
+                <a class="item" href="templates/impressum.html"><img src="img/info-btn.png" alt="Info"></a>
             </div>
         </div>
 
         <div id="game" class="game d-none">
             <div class="game-controls">
-                <div id="restart-btn-mobile" onclick="startGame()" class="mute-button d-none">
+                <div id="restart-btn-mobile" onclick="startGame()" class="hide-on-start mute-button d-none">
                     <span>↻</span>
                 </div>
                 <div id="stop-game-btn" onclick="resetGame()" class="mute-button">
@@ -50,9 +51,6 @@
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/>
                     </svg>
                 </div>
-
-                
-
                 <button id="mute-btn" class="mute-button">
                     <span class="sound-on">🔊</span>
                     <span class="sound-off d-none">🔇</span>
@@ -63,7 +61,7 @@
             <div class="game-menu">
                 <div>
                     <img class="stop-game-btn" onclick="resetGame()" src="img/stop-game-btn.png" alt="Stop Game" />
-                    <img id="restart-btn" class="stop-game-btn d-none" onclick="startGame()" src="img/restart-btn.png" alt="Restart Game" />
+                    <img id="restart-btn" class="stop-game-btn d-none hide-on-start" onclick="startGame()" src="img/restart-btn.png" alt="Restart Game" />
                 </div>
                 <img onclick="fullScreen()" class="full-screen-btn" src="img/fullScreen.png" alt="full Screen" />
             </div>

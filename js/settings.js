@@ -73,6 +73,10 @@ function isMuted() {
     return (soundSetting === "false" && musicSetting === "false");
 }
 
+/**
+ * Handles the UI and localStorage updates when muting the sound.
+ * @returns {void}
+ */
 function handleMute() {
     const soundOnIcon = document.querySelector('.sound-on');
     const soundOffIcon = document.querySelector('.sound-off');
@@ -82,6 +86,12 @@ function handleMute() {
     localStorage.setItem('music', 'false');
 }
 
+/**
+ * Handles the UI and localStorage updates when unmuting the sound.
+ * It updates the UI to show the 'sound on' icon and hide the 'sound off' icon.
+ * It also sets both 'sound' and 'music' settings in localStorage to 'true'.
+ * @returns {void}
+ */
 function handleUnmute() {
     const soundOnIcon = document.querySelector('.sound-on');
     const soundOffIcon = document.querySelector('.sound-off');

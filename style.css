@@ -72,7 +72,6 @@ canvas{
     font-size: 40px !important;
 }
 
-
 .game-menu{
     margin-top: 20px;
     display: flex;
@@ -126,6 +125,7 @@ canvas{
 
 .menu .item img{
     width: 100px;
+    height: 50px;
     cursor: pointer;
     transition: all 175ms ease-in-out;
 }
@@ -137,17 +137,6 @@ canvas{
 
 .d-none{
     display: none !important;
-}
-
-
-
-
-.game-over-menu {
-    position: absolute;
-    bottom: 20%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 10;
 }
 
 .restart-btn {
@@ -166,36 +155,18 @@ canvas{
     background-color: #ff8533;
 }
 
-.close{
-    background-color: rgb(66, 18, 18);
-    color: white;
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 36px;
-    width: 100%;
-    display: flex;
-    box-sizing: border-box;
-    justify-content: center;
-    margin-top: 40px;
-}
-
-
-
-
-/* Help Screen Styles */
-
 .help-screen{
     max-width: 850px;
-    width: 90%;
+    width: 95%;
     padding: 24px;
     background: #fff3e0;
     border-radius: 18px;
     box-shadow: 0 4px 14px rgba(0,0,0,0.25);
     color: #3e2723;
-    max-height: 90%;
+    max-height: 95vh;
     overflow-y: auto;
     box-sizing: border-box;
+    margin: auto;
 }
 
 .help-screen h1{
@@ -243,6 +214,7 @@ canvas{
     width: 100%;
     display: flex;
     justify-content: center;
+    margin-top: 20px;
 }
 
 .help-screen .back-btn-container a{
@@ -259,6 +231,12 @@ canvas{
     background-color: #9f531c;
 }
 
+.help-screen a {
+    color: #ea7827;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 .settings-instructions{
     display: flex;
     align-items: center;
@@ -268,79 +246,72 @@ canvas{
     font-size: 24px;
 }
 
-
 .settings-screen{
     display: flex;
     align-items: center;
     flex-direction: column;
-    height: 90%;
     justify-content: space-between;
     max-height: 400px;
     gap: 5px;
 }
 
-
-/* The switch - the box around the slider */
 .switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
 }
 
-/* Hide default HTML checkbox */
 .switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
 
-/* The slider */
 .slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
 }
 
 .slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
 }
 
 input:checked + .slider {
-  background-color: #9f531c;
+    background-color: #9f531c;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #9f531c;
+    box-shadow: 0 0 1px #9f531c;
 }
 
 input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
 }
 
-/* Rounded sliders */
 .slider.round {
-  border-radius: 34px;
+    border-radius: 34px;
 }
 
 .slider.round:before {
-  border-radius: 50%;
+    border-radius: 50%;
 }
 
 .game-controls {
@@ -369,7 +340,6 @@ input:checked + .slider:before {
     box-sizing: border-box;
 }
 
-
 .mute-button:active {
     transform: scale(0.95);
 }
@@ -380,29 +350,9 @@ input:checked + .slider:before {
     fill: white;
 }
 
-
-
-@media (max-height:680px){
-
-    .stop-game-btn{
-        width: 180px;
-    }
-    .full-screen-btn{
-        width: 30px;
-        height: 30px;
-    }
-
-    .game{
-        padding: 15px;
-       
-    }
-
-}
-
 .mobile-game-controls{
     display: none;
 }
-
 
 .mobile-btn {
     width: 70px;
@@ -420,7 +370,6 @@ input:checked + .slider:before {
     transition: all 0.2s ease;
 }
 
-
 .mobile-btn:hover {
     background: rgba(255, 255, 255, 0.25);
     box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
@@ -432,14 +381,12 @@ input:checked + .slider:before {
     transform: scale(0.95);
 }
 
-/* Position links/rechts */
 #btnRight { 
     right: 20px;
     position: absolute;
     bottom: 20px;
 }
 
-/* SVG-Pfeil */
 .arrow {
     fill: white;
     width: 40px;;
@@ -455,9 +402,9 @@ input:checked + .slider:before {
     flex-direction: column;
 }
 
-/* === Base layout === */
-  #orientation-message[hidden] { display: none !important; }
-  #orientation-message {
+
+#orientation-message[hidden] { display: none !important; }
+#orientation-message {
     position: fixed;
     inset: 0;
     display: flex;
@@ -470,10 +417,9 @@ input:checked + .slider:before {
     text-align: center;
     font-family: "Trebuchet MS", "Comic Sans MS", sans-serif;
     padding: 20px;
-  }
+}
 
-  /* === Card === */
-  .orientation-card {
+.orientation-card {
     background: #fff3e0;
     border: 3px dashed #ff7043;
     border-radius: 24px;
@@ -485,46 +431,45 @@ input:checked + .slider:before {
     flex-direction: column;
     align-items: center;
     animation: pop-in 0.4s ease;
-  }
+}
 
-  .throw-icon {
+.throw-icon {
     width: 60px;
     height: 60px;
     opacity: 0.8;
     transform: rotate(20deg);
-  }
+}
 
-  @keyframes pop-in {
-    from { transform: scale(0.9); opacity: 0; }
-    to   { transform: scale(1); opacity: 1; }
-  }
+@keyframes pop-in {
+from { transform: scale(0.9); opacity: 0; }
+to   { transform: scale(1); opacity: 1; }
+}
 
-  /* === Text === */
-  .orientation-card h2 {
+.orientation-card h2 {
     color: #e64a19;
     font-size: 1.5rem;
     margin: 16px 0 6px;
-  }
+}
 
-  .orientation-card p {
+.orientation-card p {
     margin: 0;
     font-weight: 600;
     font-size: 1rem;
     color: #5d4037;
-  }
+}
 
-  #orientation-mode {
+#orientation-mode {
     color: #bf360c;
     font-weight: 900;
-  }
+}
 
 .phone {
-  height: 50px;
-  width: 100px;
-  margin: 20px 0;
-  border: 3px solid rgb(79, 40, 0);
-  border-radius: 10px;
-  animation: rotate 1.5s ease-in-out infinite alternate;
+    height: 50px;
+    width: 100px;
+    margin: 20px 0;
+    border: 3px solid rgb(79, 40, 0);
+    border-radius: 10px;
+    animation: rotate 1.5s ease-in-out infinite alternate;
 }
 
 @keyframes rotate {
@@ -539,10 +484,6 @@ input:checked + .slider:before {
 	}
 }
 
-@media only screen and (max-device-width: 812px) and (orientation: landscape) {
-  .phone, .message {
-    display: block;
-  }
-}
+
 
  
