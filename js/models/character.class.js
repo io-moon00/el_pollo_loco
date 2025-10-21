@@ -138,7 +138,7 @@ class Character extends MovableObject{
      * @returns {boolean} - True if the character should move left, false otherwise.
      */
     shouldWalkLeft(){
-        return (this.world.keyboard.LEFT || this.world.keyboard.A) && this.x > -600;
+        return (this.world.keyboard.LEFT || this.world.keyboard.A) && this.x > -200;
     }
 
     /**
