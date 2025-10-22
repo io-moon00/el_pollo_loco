@@ -84,7 +84,6 @@ function showStartscreen(){
     document.getElementById('menu').classList.remove('d-none');
     document.getElementById('start-game-btn').classList.remove('d-none');
     document.getElementById('restart-btn').classList.add('d-none');
-    elements = document.getElementsByClassName('hide-on-start');
 }
 
 /**
@@ -99,6 +98,7 @@ function showGameScreen(){
     document.getElementById('body').style.backgroundImage = "url('img/game-background.png')";
     document.getElementById('menu').classList.add('d-none');
     document.getElementById('start-game-btn').classList.add('d-none');
+    document.getElementById('stop-btn').classList.remove('d-none');
 }
 
 

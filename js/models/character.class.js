@@ -297,7 +297,7 @@ class Character extends MovableObject{
                 this.playAnimation(this.IMAGES_DEAD);
                 this.fallDown();
             } else if(this.isAboveGround()){
-                this.playAnimation(this.IMAGES_JUMPING);
+                this.playJumpingAnimation();
             } else if(this.isHurt()){
                 this.playAnimation(this.IMAGES_HURT);
                 this.playSound(this.hurtSound);
@@ -310,6 +310,24 @@ class Character extends MovableObject{
                 this.playAnimation(this.IMAGES_IDLE);
             }
         }, 100);
+    }
+
+    /**
+     * Plays the jumping animation, filtering out takeoff and landing frames when high above ground.
+     * @returns {void}
+     */
+    playJumpingAnimation() {
+        const groundOffset = 50; // Adjust this value to define "high above ground"
+        const distanceFromGround = this.y - (480 - this.height); // Assuming 480 is ground level
+        
+        if (Math.abs(distanceFromGround) > groundOffset) {
+            // Character is high above ground, use only middle frames (skip first 2 and last 1)
+            const midAirFrames = this.IMAGES_JUMPING.slice(2, -1);
+            this.playAnimation(midAirFrames);
+        } else {
+            // Character is close to ground, use all frames
+            this.playAnimation(this.IMAGES_JUMPING);
+        }
     }
 
     /**

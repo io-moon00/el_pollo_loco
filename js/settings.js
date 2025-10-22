@@ -139,10 +139,22 @@ function setMuted() {
     }
 }
 
+// ...existing code...
+
 document.addEventListener('DOMContentLoaded', () => {
     let images = document.getElementsByTagName('img');
     let buttons = document.getElementsByTagName('button');
     let links = document.getElementsByTagName('a');
+
+    /**
+     * Detects if the current device is a mobile device.
+     * @returns {boolean} Returns true if the device is mobile, otherwise false.
+     */
+    function isMobileDevice() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+               ('ontouchstart' in window) || 
+               (navigator.maxTouchPoints > 0);
+    }
 
     /**
      * Prevents the context menu from appearing on right-click or long-press
@@ -165,15 +177,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    for (let i = 0; i < images.length; i++) {
-        preventContextMenu(images[i]);
-    }
-    
-    for (let i = 0; i < buttons.length; i++) {
-        preventContextMenu(buttons[i]);
-    }
+    // Only apply context menu prevention on mobile devices
+    if (isMobileDevice()) {
+        for (let i = 0; i < images.length; i++) {
+            preventContextMenu(images[i]);
+        }
+        
+        for (let i = 0; i < buttons.length; i++) {
+            preventContextMenu(buttons[i]);
+        }
 
-    for (let i = 0; i < links.length; i++) {
-        preventContextMenu(links[i]);
+        for (let i = 0; i < links.length; i++) {
+            preventContextMenu(links[i]);
+        }
     }
 });

@@ -36,6 +36,7 @@ class WorldEndScreen {
             btn.classList.remove('d-none');
         }
         document.getElementById('mobile-game-controls').classList.add('d-none');
+        document.getElementById('stop-btn').classList.add('d-none');
     }
 
     /**

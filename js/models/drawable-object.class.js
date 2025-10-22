@@ -13,6 +13,7 @@ class DrawableObject {
         bottom: 0
     };
     range = 5 * 719 - 400;
+    isRemoved = false;
 
 
     /**
@@ -75,6 +76,7 @@ class DrawableObject {
      * @returns {void} This function does not return a value.
      */
     removeFromWorld(timeout = 600){
+        this.isRemoved = true;
         setTimeout(() => {
             this.y = -1000;
         }, timeout);

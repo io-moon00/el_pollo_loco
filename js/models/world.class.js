@@ -14,7 +14,7 @@ class World{
     qKeyPressed = false;
     gameWonMenuShown = false;
     gameRunning = true;
-    dirtyRegions = [];
+    isConvertingCoin = false;
 
     constructor(canvas, keyboard){
         this.gameRunning = true;
@@ -27,7 +27,6 @@ class World{
         this.draw();
         this.run();
     };
-
 
     /**
      * Starts the main game loop.
@@ -62,6 +61,7 @@ class World{
         if (!this.gameRunning) return; 
         this.physics.checkCollisions();
         this.checkThrowObjects();
+        this.checkEnoughBottles();
         this.update();
         if (this.isGameOver()) {
             this.endScreen.drawGameOverScreen();
@@ -123,6 +123,16 @@ class World{
         }
     }
 
+    hasTimeoutFinishedLastEnbossHit(){
+        let throwable = true;
+        if (this.level.endboss.firstContact) {
+            if (this.level.endboss.isHurt()) {
+                throwable = false;
+            }
+        }
+        return throwable;
+    }
+
     /**
      * Checks for player input to throw a bottle and manages the throwing action.
      * If the 'Q' key is pressed and there are bottles available, it creates a new ThrowableBottle,
@@ -131,7 +141,7 @@ class World{
      * @returns {void}
      */
     checkThrowObjects(){
-        if(this.keyboard.Q && !this.qKeyPressed){
+        if(this.keyboard.Q && !this.qKeyPressed && this.hasTimeoutFinishedLastEnbossHit()){
             this.qKeyPressed = true;
             if (this.character.collectedBottles > 0){
                 let bottle = new ThrowableBottle(this.character.x+100, this.character.y+100, this.character.otherDirection);
@@ -225,5 +235,40 @@ class World{
      */
     isGameWon(){
         return this.level.endboss.isDead() && this.level.endboss.deadAnimationCompleted;
+    }
+
+    /**
+     * Checks if the player has enough bottles (collected and available on the map) to defeat the end boss.
+     * @returns {boolean} True if there are enough bottles to defeat the end boss, otherwise false.
+     */
+    hasEnoughBottles() {
+        if (!this.level.endboss.firstContact) {
+        return true;
+        }
+        let collectableBottles = this.level.collectableBottles.filter(bottle => !bottle.isCollected).length;
+        let remainingEndbossHealth = this.level.endboss.life;
+        let RequiredBottles = remainingEndbossHealth / 5;
+        let collectedBottles = this.character.collectedBottles;
+        let availableBottles = collectedBottles + collectableBottles;
+        console.log('Available Bottles:', availableBottles, 'Required Bottles:', RequiredBottles);
+        console.log(availableBottles >= RequiredBottles)
+        return availableBottles >= RequiredBottles;
+    }
+
+    /**
+     * Checks if the player has enough bottles to defeat the end boss. If not, and the player has no bottles but has coins,
+     * @returns {void}
+     */
+    checkEnoughBottles(){
+        if (!this.hasEnoughBottles() && this.character.collectedBottles == 0 && !this.isConvertingCoin) {
+            if (this.character.collectedCoins > 0) {
+                this.isConvertingCoin = true;
+                this.character.collectedCoins -= 1;
+                setTimeout(() => {
+                    this.character.collectedBottles += 1;
+                    this.isConvertingCoin = false;
+                }, 300);
+            }
+        }
     }
 }

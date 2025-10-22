@@ -80,7 +80,7 @@ class ThrowableBottle extends MovableObject{
         this.playSound(this.splashSound);
         setTimeout(() => {
             this.splashSound.pause();
-        }, 300);
+        }, 200);
     }
 
     /**
