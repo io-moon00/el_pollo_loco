@@ -45,8 +45,8 @@ class Endboss extends MovableObject {
     x = 5 * 719 - 600;
     width = 350;
     height = 350;
-    life = 60;
-    speed = 2;
+    life = 40;
+    speed = 1;
     firstContact = false;
     isAlert = false;
     world;
@@ -133,6 +133,18 @@ class Endboss extends MovableObject {
     }
 
     /**
+     * Checks if a sufficient amount of time has passed since the end boss was last hit.
+     * This is used to create a cooldown period after being hurt, preventing the boss from being
+     * continuously damaged. The cooldown is set to 1000 milliseconds (1 second).
+     * @returns {boolean} - True if there was no previous hit or if the time since the last hit is greater than 1 second, otherwise false.
+     */
+    isHurtPassed() {
+        if (!this.lastHit) return true;
+        let timepassed = new Date().getTime() - this.lastHit;
+        return timepassed > 1000;
+    }
+
+    /**
      * Manages the movement and action logic for the end boss.
      * This function sets up an interval that continuously checks the character's position
      * relative to the boss and triggers the appropriate movement (left or right).
@@ -163,6 +175,19 @@ class Endboss extends MovableObject {
     }
 
     /**
+     * Registers a hit on the end boss, reducing its life points.
+     * This method includes a cooldown mechanism to prevent the boss from being damaged too frequently.
+     * The actual hit is only processed if a sufficient amount of time has passed since the last hit,
+     * as determined by the `isHurtPassed` method.
+     * @returns {void}
+     */
+    hit(){
+        if (this.isHurtPassed()){
+            super.hit();
+        }
+    }
+
+    /**
      * Selects and animates the appropriate images based on the end boss's current state.
      * The states are checked in a specific order of priority: dead, hurt, attacking, alert,
      * and finally walking as the default state.
@@ -170,10 +195,11 @@ class Endboss extends MovableObject {
      */
     playCurrentAnimation() {
         this.attackingSound.pause();
+        console.log(this.isHurtPassed());
         this.hurtSound.pause();
         if(this.isDead()){
             this.deadAnimation();
-        } else if(this.isHurt()){
+        } else if(this.isHurt() && !this.isHurtPassed()){
             this.playSound(this.hurtSound);
             this.playAnimation(this.IMAGES_HURT);
         } else if(this.isAttacking()){

@@ -124,9 +124,13 @@ class World{
     }
 
     hasTimeoutFinishedLastEnbossHit(){
+        if (!this.level.endboss.lastHit) return true;
         let throwable = true;
+        let now = new Date();
+        let lastHit = this.level.endboss.lastHit;
+        let timeSinceLastHit = now - lastHit;
         if (this.level.endboss.firstContact) {
-            if (this.level.endboss.isHurt()) {
+            if (this.level.endboss.isHurt() && timeSinceLastHit < 1500) {
                 throwable = false;
             }
         }
@@ -225,7 +229,7 @@ class World{
      * @returns {boolean} True if the game is over, otherwise false.
      */
     isGameOver(){
-        return this.character.isDead() && this.character.y > this.canvas.height;
+        return (this.character.isDead() && this.character.y > this.canvas.height) || (this.character.collectedCoins == 0 && this.character.collectedBottles == 0 && !this.hasEnoughBottles());
     }
 
     /**
@@ -250,8 +254,6 @@ class World{
         let RequiredBottles = remainingEndbossHealth / 5;
         let collectedBottles = this.character.collectedBottles;
         let availableBottles = collectedBottles + collectableBottles;
-        console.log('Available Bottles:', availableBottles, 'Required Bottles:', RequiredBottles);
-        console.log(availableBottles >= RequiredBottles)
         return availableBottles >= RequiredBottles;
     }
 

@@ -88,6 +88,10 @@ button {
     width: 100%;
 }
 
+#home-btn{
+    margin-left: -10px;
+}
+
 .game-menu div{
     display: flex;
     align-items: center;
