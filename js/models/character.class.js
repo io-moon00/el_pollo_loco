@@ -319,7 +319,8 @@ class Character extends MovableObject{
      */
     playJumpingAnimation() {
         if (this.isAboveGround() && this.jumpingImagesIndex < this.IMAGES_JUMPING.length) {
-            this.playAnimation(this.IMAGES_JUMPING);
+            let path = this.IMAGES_JUMPING[this.jumpingImagesIndex];
+            this.img = this.imageCache[path];
             this.jumpingImagesIndex++;
         }
     }
