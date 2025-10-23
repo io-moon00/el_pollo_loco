@@ -195,7 +195,6 @@ class Endboss extends MovableObject {
      */
     playCurrentAnimation() {
         this.attackingSound.pause();
-        console.log(this.isHurtPassed());
         this.hurtSound.pause();
         if(this.isDead()){
             this.deadAnimation();

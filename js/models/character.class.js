@@ -77,6 +77,7 @@ class Character extends MovableObject{
     startSlowdownThreshold = 850;
     currentDirection = "right";
     previousDirection = "right";
+    jumpingImagesIndex = 0;
 
     constructor(){
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
@@ -317,17 +318,15 @@ class Character extends MovableObject{
      * @returns {void}
      */
     playJumpingAnimation() {
-        const groundOffset = 50; // Adjust this value to define "high above ground"
-        const distanceFromGround = this.y - (480 - this.height); // Assuming 480 is ground level
-        
-        if (Math.abs(distanceFromGround) > groundOffset) {
-            // Character is high above ground, use only middle frames (skip first 2 and last 1)
-            const midAirFrames = this.IMAGES_JUMPING.slice(2, -1);
-            this.playAnimation(midAirFrames);
-        } else {
-            // Character is close to ground, use all frames
+        if (this.isAboveGround() && this.jumpingImagesIndex < this.IMAGES_JUMPING.length) {
             this.playAnimation(this.IMAGES_JUMPING);
+            this.jumpingImagesIndex++;
         }
+    }
+
+    jump(){
+        super.jump();
+        this.jumpingImagesIndex = 0;
     }
 
     /**
